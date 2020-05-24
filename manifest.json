@@ -1,0 +1,29 @@
+{
+    "name": "Getting Started Example",
+    "version": "1.0",
+    "description": "Build an Extension!",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "matches": ["https://github.com/*"],
+            "js": ["inject.js"],
+            "run_at": "document_end"
+        }
+    ],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+    "permissions": [
+        "storage",
+        "tabs",
+        "http://*/*",
+        "https://*/*",
+        "<all_urls>",
+        "webRequest",
+        "webRequestBlocking",
+        "management"
+    ],
+    "web_accessible_resources": ["*"],
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
