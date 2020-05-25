@@ -1,5 +1,7 @@
 import * as monacoTypes from "monaco-editor";
 
+export type Monaco = typeof monacoTypes;
+
 function loadScript(url: string) {
 	const pluginScript = document.createElement("script");
 	pluginScript.type = "text/javascript";

@@ -31,7 +31,6 @@
 		"webpack-cli": "^3.3.11"
 	},
 	"dependencies": {
-		"fork-ts-checker-webpack-plugin": "^4.1.4",
 		"monaco-editor": "^0.20.0",
 		"monaco-editor-webpack-plugin": "^1.9.0",
 		"typed-lexer": "^1.0.2"
