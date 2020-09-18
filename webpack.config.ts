@@ -9,7 +9,7 @@ const r = (file: string) => path.resolve(__dirname, file);
 module.exports = {
 	entry: {
 		"content-script": r("./src/content-script"),
-		"content-script-main": r("./src/content-script-main"),
+		"content-script-main": r("./src/content-script-main/index"),
 	},
 	output: {
 		path: r("./dist"),
@@ -45,9 +45,9 @@ module.exports = {
 		}),
 		new ForkTsCheckerWebpackPlugin(),
 		new CleanWebpackPlugin(),
-		/*new MonacoWebpackPlugin({
+		new MonacoWebpackPlugin({
 			// Add more languages here once webworker issues are solved.
 			languages: ["typescript"],
-		}),*/
+		}),
 	],
 } as webpack.Configuration;

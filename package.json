@@ -4,6 +4,11 @@
 	"version": "1.0.0",
 	"author": "Henning Dieterichs <henning.dieterichs@live.de>",
 	"license": "UNLICENSED",
+	"scripts": {
+		"dev": "webpack --watch",
+		"build": "webpack --mode production",
+		"bundle": "yarn shx rm ./dist/extension.zip && yarn jszip-cli add -o ./dist/extension.zip -i *.map dist manifest.json logo.drawio.png"
+	},
 	"devDependencies": {
 		"@types/chrome": "^0.0.114",
 		"@types/classnames": "^2.2.9",
@@ -28,9 +33,12 @@
 		"ts-node": "^8.6.2",
 		"typescript": "^3.8.2",
 		"webpack": "^4.41.6",
-		"webpack-cli": "^3.3.11"
+		"webpack-cli": "^3.3.11",
+		"@ffflorian/jszip-cli": "^3.1.0",
+		"shx": "^0.3.2"
 	},
 	"dependencies": {
+		"@hediet/monaco-editor-react": "^0.1.1",
 		"monaco-editor": "^0.20.0",
 		"monaco-editor-webpack-plugin": "^1.9.0",
 		"typed-lexer": "^1.0.2"

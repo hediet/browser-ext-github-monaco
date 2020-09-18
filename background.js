@@ -1,10 +1,12 @@
+// This is only required when loading monaco from cdn.
+
 function isCSPHeader(headerName) {
 	return (
 		headerName === "CONTENT-SECURITY-POLICY" ||
 		headerName === "X-WEBKIT-CSP"
 	);
 }
-// Listens on new request
+
 chrome.webRequest.onHeadersReceived.addListener(
 	(details) => {
 		for (let i = 0; i < details.responseHeaders.length; i += 1) {
