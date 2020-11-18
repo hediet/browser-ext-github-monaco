@@ -1,10 +1,9 @@
 declare let __webpack_public_path__: string;
 __webpack_public_path__ = (window as any).hedietMonacoEditorPublicPath;
 
-import { LexerFactory, matches, or } from "typed-lexer";
 import { loadMonaco } from "../monaco-loader";
 import { GithubApi } from "./GithubApi";
-import { EditorWrapper } from "./EditorWrapper";
+import { EditorWrapper, isMonacoNode } from "./EditorWrapper";
 import { CompletionController } from "./CompletionController";
 
 async function main() {
@@ -12,7 +11,7 @@ async function main() {
 	const monaco = await loadMonaco();
 	const completionController = new CompletionController(monaco, githubApi);
 
-	setInterval(() => {
+	function updateDocument() {
 		for (const textArea of [
 			...(document.getElementsByClassName(
 				"comment-form-textarea"
@@ -20,7 +19,30 @@ async function main() {
 		]) {
 			EditorWrapper.wrap(textArea, monaco, completionController);
 		}
-	}, 100);
+
+		for (const div of [
+			...(document.getElementsByClassName("hediet-monaco-node") as any),
+		]) {
+			if (!isMonacoNode(div)) {
+				div.remove();
+			}
+		}
+	}
+
+	let timeout: NodeJS.Timeout | undefined = undefined;
+	const mutationObserver = new MutationObserver(() => {
+		if (!timeout) {
+			timeout = setTimeout(() => {
+				updateDocument();
+				timeout = undefined;
+			}, 50);
+		}
+	});
+
+	mutationObserver.observe(document.body, {
+		subtree: true,
+		childList: true,
+	});
 }
 
 main();

@@ -1,6 +1,14 @@
 import { Monaco } from "../monaco-loader";
 import { CompletionController } from "./CompletionController";
 
+export interface MonacoNode extends HTMLDivElement {
+	hedietEditorWrapper: EditorWrapper;
+}
+
+export function isMonacoNode(n: unknown): n is MonacoNode {
+	return typeof n === "object" && n !== null && "hedietEditorWrapper" in n;
+}
+
 export class EditorWrapper {
 	public static wrap(
 		textArea: HTMLTextAreaElement,
@@ -10,13 +18,15 @@ export class EditorWrapper {
 		if (textArea.hedietEditorWrapper) {
 			return textArea.hedietEditorWrapper;
 		}
+		console.log("text area", textArea);
 		return new EditorWrapper(textArea, monaco, completionController);
 	}
 
+	private disposed = false;
 	private readonly disposables = new Array<() => any>();
 
 	private constructor(
-		textArea: HTMLTextAreaElement,
+		private readonly textArea: HTMLTextAreaElement,
 		monaco: Monaco,
 		completionController: CompletionController
 	) {
@@ -24,18 +34,24 @@ export class EditorWrapper {
 		textArea.style.display = "none";
 		const editorRoot = textArea.parentNode!;
 
-		const editorNode = document.createElement("div");
-		editorNode.style.display = "flex";
-		editorNode.style.boxSizing = "border-box";
-		editorNode.style.paddingBottom = "10px";
-		editorRoot.appendChild(editorNode);
+		const monacoNode = document.createElement("div");
+		monacoNode.className = "hediet-monaco-node";
+		monacoNode.style.display = "flex";
+		monacoNode.style.boxSizing = "border-box";
+		monacoNode.style.paddingBottom = "10px";
+		(monacoNode as MonacoNode).hedietEditorWrapper = this;
+		editorRoot.appendChild(monacoNode);
+
+		this.disposables.push(() => {
+			monacoNode.remove();
+		});
 
 		const onEditorFocusChanged = (isFocused: boolean) => {
 			if (isFocused) {
-				editorNode.style.border = "1px solid #4a9eff";
+				monacoNode.style.border = "1px solid #4a9eff";
 				textArea.dispatchEvent(new Event("focus"));
 			} else {
-				editorNode.style.border = "1px solid #c3c8cf";
+				monacoNode.style.border = "1px solid #c3c8cf";
 				textArea.dispatchEvent(new Event("blur"));
 			}
 		};
@@ -43,13 +59,13 @@ export class EditorWrapper {
 		onEditorFocusChanged(false);
 
 		const monacoContainer = document.createElement("div");
-		monacoContainer.className = "monaco-container";
+		monacoContainer.className = "hediet-monaco-container";
 		monacoContainer.style.minWidth = "300px";
 		monacoContainer.style.minHeight = "0";
 		monacoContainer.style.flex = "1";
 		monacoContainer.style.height = `200px`;
 
-		editorNode.appendChild(monacoContainer);
+		monacoNode.appendChild(monacoContainer);
 
 		const model = monaco.editor.createModel(textArea.value, "markdown");
 
@@ -79,7 +95,7 @@ export class EditorWrapper {
 			if (!document.body.contains(textArea)) {
 				this.dispose();
 			}
-		});
+		}, 100);
 		this.disposables.push(() => clearInterval(interval));
 
 		textArea.addEventListener("change", () => {
@@ -126,6 +142,10 @@ export class EditorWrapper {
 	}
 
 	dispose() {
+		if (this.disposed) {
+			return;
+		}
+		this.disposed = true;
 		for (const d of this.disposables) {
 			d();
 		}

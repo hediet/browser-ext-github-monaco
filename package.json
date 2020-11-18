@@ -5,7 +5,7 @@
 	"author": "Henning Dieterichs <henning.dieterichs@live.de>",
 	"license": "UNLICENSED",
 	"scripts": {
-		"dev": "webpack --watch",
+		"dev": "webpack --watch --mode dev",
 		"build": "webpack --mode production",
 		"bundle": "yarn shx rm ./dist/extension.zip && yarn jszip-cli add -o ./dist/extension.zip -i *.map dist manifest.json logo.drawio.png"
 	},
