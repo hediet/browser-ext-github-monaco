@@ -6,7 +6,7 @@
 
 This extension brings the famous Monaco editor to Github!
 
-<img src="docs/screenshot.png" width="750">
+![](./docs/screenshot.png)
 
 ---
 
@@ -21,4 +21,4 @@ This extension replaces all github text areas for authoring markdown with a mona
 
 ## Demo
 
-<img src="docs/demo.gif" width="750">
+![](./docs/demo.gif)
