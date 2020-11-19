@@ -18,7 +18,6 @@ export class EditorWrapper {
 		if (textArea.hedietEditorWrapper) {
 			return textArea.hedietEditorWrapper;
 		}
-		console.log("text area", textArea);
 		return new EditorWrapper(textArea, monaco, completionController);
 	}
 
@@ -120,7 +119,6 @@ export class EditorWrapper {
 
 		model.onDidChangeContent((e) => {
 			if (e.changes.length === 1 && e.changes[0].text === " ") {
-				console.log("should cancel");
 				editor.trigger("editor", "hideSuggestWidget", undefined);
 			}
 			const value = model.getValue();

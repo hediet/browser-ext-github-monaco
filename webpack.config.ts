@@ -6,6 +6,8 @@ import ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const r = (file: string) => path.resolve(__dirname, file);
 
+const useCdnForMonaco = process.argv.indexOf("--use-cdn-for-monaco") !== -1;
+
 module.exports = {
 	entry: {
 		"content-script": r("./src/content-script"),
@@ -42,12 +44,17 @@ module.exports = {
 		new CleanWebpackPlugin(),
 		new webpack.EnvironmentPlugin({
 			NODE_ENV: null,
+			USE_CDN_FOR_MONACO: useCdnForMonaco ? "1" : "0",
 		}),
 		new ForkTsCheckerWebpackPlugin(),
 		new CleanWebpackPlugin(),
-		new MonacoWebpackPlugin({
-			// Add more languages here once webworker issues are solved.
-			languages: ["typescript"],
-		}),
+		...(useCdnForMonaco
+			? []
+			: [
+					new MonacoWebpackPlugin({
+						// Add more languages here once webworker issues are solved.
+						languages: ["typescript"],
+					}),
+			  ]),
 	],
 } as webpack.Configuration;

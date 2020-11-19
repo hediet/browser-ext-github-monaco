@@ -52,7 +52,6 @@ export class CompletionController {
 				c.startPos <= position.column &&
 				position.column <= c.startPos + c.length + 1
 			) {
-				console.log("token", c.token);
 				if (c.token !== "text") {
 					currentToken = {
 						kind: c.token,
@@ -75,10 +74,8 @@ export class CompletionController {
 			startColumn: currentToken.startPos + 1,
 			endColumn: currentToken.startPos + 1 + currentToken.length,
 		};
-		console.log(range, position.column);
 		if (currentToken.kind === "mention") {
 			const data = await this.api.getMentionSuggestions(urls.mentionUrl);
-			console.log(data);
 			return {
 				suggestions: data.map((s) => ({
 					label: s.name,

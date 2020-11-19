@@ -1,4 +1,4 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0]
 
 -   Fixes buggy layout when commenting on a source code line.
+-   Removes all console.logs.
 
 ## [0.1.0]
 

@@ -43,6 +43,8 @@ async function main() {
 		subtree: true,
 		childList: true,
 	});
+
+	updateDocument();
 }
 
 main();
