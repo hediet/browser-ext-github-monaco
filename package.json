@@ -7,8 +7,9 @@
 	"scripts": {
 		"dev": "webpack --watch --mode development --use-cdn-for-monaco",
 		"dev-without-cdn": "webpack --watch --mode dev",
-		"build": "webpack --mode production",
-		"bundle": "yarn shx rm ./dist/extension.zip && yarn jszip-cli add -o ./dist/extension.zip -i *.map dist manifest.json logo.drawio.png"
+		"build": "yarn build-js && yarn bundle",
+		"build-js": "webpack --mode production",
+		"bundle": "yarn shx rm -rf ./dist/extension.zip && yarn jszip-cli add -o ./dist/extension.zip -i *.map dist manifest.json logo.drawio.png"
 	},
 	"devDependencies": {
 		"@types/chrome": "^0.0.114",
