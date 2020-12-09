@@ -9,6 +9,17 @@ export function isMonacoNode(n: unknown): n is MonacoNode {
 	return typeof n === "object" && n !== null && "hedietEditorWrapper" in n;
 }
 
+type Theme = "light" | "dark";
+
+function getGithubTheme(): Theme {
+	try {
+		return (document.body.parentNode as any).dataset.colorMode as any;
+	} catch (e) {
+		console.warn("Could not read github colorMode");
+		return "light";
+	}
+}
+
 export class EditorWrapper {
 	public static wrap(
 		textArea: HTMLTextAreaElement,
@@ -18,7 +29,12 @@ export class EditorWrapper {
 		if (textArea.hedietEditorWrapper) {
 			return textArea.hedietEditorWrapper;
 		}
-		return new EditorWrapper(textArea, monaco, completionController);
+		return new EditorWrapper(
+			textArea,
+			monaco,
+			completionController,
+			getGithubTheme()
+		);
 	}
 
 	private disposed = false;
@@ -27,7 +43,8 @@ export class EditorWrapper {
 	private constructor(
 		private readonly textArea: HTMLTextAreaElement,
 		monaco: Monaco,
-		completionController: CompletionController
+		completionController: CompletionController,
+		theme: "light" | "dark"
 	) {
 		textArea.hedietEditorWrapper = this;
 		textArea.style.display = "none";
@@ -77,6 +94,21 @@ export class EditorWrapper {
 			minimap: { enabled: false },
 			scrollBeyondLastLine: false,
 			wordWrap: "on",
+			theme: theme === "dark" ? "vs-dark" : "vs",
+		});
+
+		editor.addAction({
+			id: "github.submit",
+			label: "Submit",
+			run: () => {
+				const ctrlEnterEvent = new KeyboardEvent("keydown", {
+					key: "Enter",
+					code: "Enter",
+					ctrlKey: true,
+				});
+				textArea.dispatchEvent(ctrlEnterEvent);
+			},
+			keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
 		});
 
 		this.disposables.push(() => editor.dispose());
