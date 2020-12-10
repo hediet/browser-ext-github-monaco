@@ -58,6 +58,19 @@ export class EditorWrapper {
 		(monacoNode as MonacoNode).hedietEditorWrapper = this;
 		editorRoot.appendChild(monacoNode);
 
+		// GH queries for all text areas that have non zero size, e.g. when
+		// the "Quote Reply" action. `display: none` on textArea breaks this logic.
+		// We must hack around this by overriding these properties.
+		// Since github also has hidden text areas,
+		// textArea must have a non-zero size if and only if
+		// monacoNode has a non-zero size.
+		Object.defineProperty(textArea, "offsetHeight", {
+			get: () => monacoNode.offsetHeight,
+		});
+		Object.defineProperty(textArea, "offsetWidth", {
+			get: () => monacoNode.offsetWidth,
+		});
+
 		this.disposables.push(() => {
 			monacoNode.remove();
 		});
@@ -97,6 +110,14 @@ export class EditorWrapper {
 			theme: theme === "dark" ? "vs-dark" : "vs",
 		});
 
+		// GH calls textArea.focus() in some places.
+		// We want to focus the monaco editor instead.
+		Object.defineProperty(textArea, "focus", {
+			value: () => {
+				editor.focus();
+			},
+		});
+
 		editor.addAction({
 			id: "github.submit",
 			label: "Submit",
@@ -130,6 +151,8 @@ export class EditorWrapper {
 		this.disposables.push(() => clearInterval(interval));
 
 		textArea.addEventListener("change", () => {
+			console.log("change", textArea.value);
+
 			if (model.getValue() !== textArea.value) {
 				model.setValue(textArea.value);
 			}
