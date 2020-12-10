@@ -151,8 +151,6 @@ export class EditorWrapper {
 		this.disposables.push(() => clearInterval(interval));
 
 		textArea.addEventListener("change", () => {
-			console.log("change", textArea.value);
-
 			if (model.getValue() !== textArea.value) {
 				model.setValue(textArea.value);
 			}
