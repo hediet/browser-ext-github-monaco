@@ -22,3 +22,12 @@ This extension replaces all github text areas for authoring markdown with a mona
 ## Demo
 
 ![](./docs/demo.gif)
+
+## Building
+
+You need nodejs and yarn. Just run these commands to produce `extension.zip` in the dist folder:
+
+```
+yarn
+yarn build
+```
