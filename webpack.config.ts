@@ -52,7 +52,7 @@ module.exports = {
 			? []
 			: [
 					new MonacoWebpackPlugin({
-						languages: [],
+						languages: ["markdown"],
 					}),
 			  ]),
 	],

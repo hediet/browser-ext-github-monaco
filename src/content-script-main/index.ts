@@ -1,5 +1,6 @@
 declare let __webpack_public_path__: string;
-__webpack_public_path__ = (window as any).hedietMonacoEditorPublicPath;
+__webpack_public_path__ = document.head.dataset
+	.hedietMonacoEditorPublicPath as string;
 
 import { loadMonaco } from "../monaco-loader";
 import { GithubApi } from "./GithubApi";

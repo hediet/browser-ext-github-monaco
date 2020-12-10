@@ -1,5 +1,5 @@
 {
-	"name": "chrome-ext-github-monaco",
+	"name": "github-monaco-browser-extension",
 	"private": true,
 	"version": "1.0.0",
 	"author": "Henning Dieterichs <henning.dieterichs@live.de>",

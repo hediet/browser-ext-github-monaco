@@ -5,11 +5,8 @@ function injectScript(file_path: string) {
 	document.head.appendChild(script);
 }
 
-injectScript(chrome.extension.getURL("/dist/content-script-main.js"));
+document.head.dataset.hedietMonacoEditorPublicPath = chrome.extension.getURL(
+	"/dist/"
+);
 
-var script = document.createElement("script");
-script.setAttribute("type", "text/javascript");
-script.innerText = `window.hedietMonacoEditorPublicPath = ${JSON.stringify(
-	chrome.extension.getURL("/dist/")
-)};`;
-document.head.appendChild(script);
+injectScript(chrome.extension.getURL("/dist/content-script-main.js"));
