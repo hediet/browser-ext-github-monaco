@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3]
+
+-   Sets maximum editor height to 400px.
+-   Implements full screen mode.
+
 ## [0.3.2]
 
 -   Makes the extension firefox compatible.
