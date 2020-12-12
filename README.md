@@ -12,18 +12,26 @@ This Chrome/Firefox extension brings the famous Monaco editor to Github!
 
 ---
 
-## Monaco features
+## Monaco Features
 
 -   Syntax Highlighting of Markdown and Code Snippets
 -   Tab to indent and Shift+Tab to outdent entire selections
 -   Multi-Cursor Editing
 -   and much more
 
+## Additional Features
+
+-   Press F11 to toggle full screen.
+
 This extension replaces all github text areas for authoring markdown with a monaco editor.
 
 ## Demo
 
 ![](./docs/demo.gif)
+
+## Full-Screen-Mode
+
+![](./docs/fullscreen.gif)
 
 ## Building
 
