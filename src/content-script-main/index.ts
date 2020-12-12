@@ -18,7 +18,12 @@ async function main() {
 				"comment-form-textarea"
 			) as any),
 		]) {
-			EditorWrapper.wrap(textArea, monaco, completionController);
+			EditorWrapper.wrap(
+				textArea,
+				monaco,
+				completionController,
+				githubApi
+			);
 		}
 
 		for (const div of [

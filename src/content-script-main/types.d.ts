@@ -5,4 +5,5 @@ declare interface HTMLTextAreaElement {
 declare class ResizeObserver {
 	constructor(handler: () => void);
 	observe(elem: any): void;
+	disconnect(): void;
 }

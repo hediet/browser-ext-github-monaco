@@ -1,6 +1,7 @@
 import { editor } from "monaco-editor";
 import { Monaco } from "../monaco-loader";
 import { CompletionController } from "./CompletionController";
+import { GithubApi } from "./GithubApi";
 
 export interface MonacoNode extends HTMLDivElement {
 	hedietEditorWrapper: EditorWrapper;
@@ -25,7 +26,8 @@ export class EditorWrapper {
 	public static wrap(
 		textArea: HTMLTextAreaElement,
 		monaco: Monaco,
-		completionController: CompletionController
+		completionController: CompletionController,
+		api: GithubApi
 	) {
 		if (textArea.hedietEditorWrapper) {
 			return textArea.hedietEditorWrapper;
@@ -34,15 +36,17 @@ export class EditorWrapper {
 			textArea,
 			monaco,
 			completionController,
-			getGithubTheme()
+			getGithubTheme(),
+			api
 		);
 	}
 
 	private disposed = false;
 	private readonly disposables = new Array<() => any>();
 
-	private readonly monacoNode = document.createElement("div");
-	private readonly monacoContainer = document.createElement("div");
+	private readonly editorWrapperDiv = document.createElement("div");
+	private readonly monacoDiv = document.createElement("div");
+	private readonly previewDiv = document.createElement("div");
 	private readonly editorRoot: HTMLElement;
 	private readonly editor: editor.IStandaloneCodeEditor;
 
@@ -53,35 +57,38 @@ export class EditorWrapper {
 		private readonly textArea: HTMLTextAreaElement,
 		monaco: Monaco,
 		completionController: CompletionController,
-		theme: "light" | "dark"
+		theme: "light" | "dark",
+		private readonly githubApi: GithubApi
 	) {
 		this.editorRoot = textArea.parentNode as HTMLElement;
 
 		this.prepareTextArea();
 
-		this.monacoNode.className = "hediet-monaco-node";
-		(this.monacoNode as MonacoNode).hedietEditorWrapper = this;
-		this.editorRoot.appendChild(this.monacoNode);
+		this.editorWrapperDiv.className = "hediet-editor-wrapper";
+		(this.editorWrapperDiv as MonacoNode).hedietEditorWrapper = this;
+		this.editorRoot.appendChild(this.editorWrapperDiv);
 		this.disposables.push(() => {
-			this.monacoNode.remove();
+			this.editorWrapperDiv.remove();
 		});
 
 		this.handleEditorFocusChanged(false);
 
-		this.monacoContainer.className = "hediet-monaco-container";
-		this.monacoNode.appendChild(this.monacoContainer);
-		this.monacoNode.addEventListener("click", (e) => {
-			if (e.target == this.monacoNode && this.fullscreen) {
+		this.monacoDiv.className = "hediet-monaco-container";
+		this.editorWrapperDiv.appendChild(this.monacoDiv);
+		this.editorWrapperDiv.addEventListener("click", (e) => {
+			if (e.target == this.editorWrapperDiv && this.fullscreen) {
 				this.setFullScreen(false);
 			}
 		});
+
+		this.editorWrapperDiv.appendChild(this.previewDiv);
 
 		const model = monaco.editor.createModel(textArea.value, "markdown");
 
 		const { mentionUrl, issueUrl } = (this.editorRoot as any).dataset;
 		completionController.registerUrls(model, { mentionUrl, issueUrl });
 
-		this.editor = monaco.editor.create(this.monacoContainer, {
+		this.editor = monaco.editor.create(this.monacoDiv, {
 			model,
 			automaticLayout: true,
 			minimap: { enabled: false },
@@ -166,6 +173,8 @@ export class EditorWrapper {
 			const value = model.getValue();
 			textArea.value = value;
 			textArea.dispatchEvent(new Event("input"));
+
+			this.updatePreview();
 		});
 
 		this.editor.onDidContentSizeChange((e) => {
@@ -174,19 +183,63 @@ export class EditorWrapper {
 		});
 
 		const resizeObserver = new ResizeObserver(() => {
-			this.editor.layout();
+			if (this.editorRoot.offsetHeight > 0) {
+				this.editor.layout();
+			}
+			this.updatePreview();
 		});
 		resizeObserver.observe(this.editorRoot);
+		resizeObserver.observe(this.editorWrapperDiv);
 
+		this.disposables.push(() => resizeObserver.disconnect());
+
+		const applyState = () => {
+			this.applyState();
+		};
+		window.addEventListener("resize", applyState);
+		this.disposables.push(() => {
+			window.removeEventListener("resize", applyState);
+		});
+
+		this.fullscreen = this.editorRoot.offsetHeight > 0;
 		this.applyState();
+	}
+
+	private lastUpdatePreviewTimeout: any = undefined;
+	private lastText: string = "";
+	private updatePreview() {
+		if (!this.previewVisible) {
+			return;
+		}
+
+		const newText = this.editor.getModel()!.getValue();
+		if (this.lastText === newText) {
+			return;
+		}
+
+		let node: HTMLElement | null = this.editorRoot;
+		while (node && !node.getAttribute("data-preview-url")) {
+			node = node.parentElement;
+		}
+
+		if (!node) {
+			return;
+		}
+
+		clearTimeout(this.lastUpdatePreviewTimeout);
+		this.lastUpdatePreviewTimeout = setTimeout(async () => {
+			const preview = await this.githubApi.getPreview(node!, newText);
+			this.previewDiv.innerHTML = preview;
+			this.lastText = newText;
+		}, 1000);
 	}
 
 	private handleEditorFocusChanged(isFocused: boolean): void {
 		if (isFocused) {
-			this.monacoNode.style.border = "1px solid #4a9eff";
+			this.editorWrapperDiv.style.border = "1px solid #4a9eff";
 			this.textArea.dispatchEvent(new Event("focus"));
 		} else {
-			this.monacoNode.style.border = "1px solid #c3c8cf";
+			this.editorWrapperDiv.style.border = "1px solid #c3c8cf";
 			this.textArea.dispatchEvent(new Event("blur"));
 		}
 	}
@@ -222,17 +275,21 @@ export class EditorWrapper {
 		this.applyState();
 	}
 
-	private applyState() {
-		this.monacoNode.classList.toggle("fullscreen", this.fullscreen);
+	private get previewVisible(): boolean {
+		return this.fullscreen && this.editorWrapperDiv.offsetWidth > 1300;
+	}
 
-		if (this.fullscreen) {
-			this.monacoContainer.style.height = "";
-		} else {
-			this.monacoContainer.style.height = `${Math.min(
-				300,
-				Math.max(100, this.editorHeight + 2)
-			)}px`;
-		}
+	private applyState() {
+		this.updatePreview();
+		this.editorWrapperDiv.classList.toggle("fullscreen", this.fullscreen);
+
+		this.monacoDiv.style.height = this.fullscreen
+			? ""
+			: `${Math.min(300, Math.max(100, this.editorHeight + 2))}px`;
+
+		this.previewDiv.className = this.previewVisible
+			? "hediet-preview-container active comment-body markdown-body js-preview-body"
+			: "hediet-preview-container";
 	}
 
 	dispose() {
