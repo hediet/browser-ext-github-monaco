@@ -3,6 +3,7 @@ import path = require("path");
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 import ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+import MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const r = (file: string) => path.resolve(__dirname, file);
 
@@ -12,6 +13,7 @@ module.exports = {
 	entry: {
 		"content-script": r("./src/content-script"),
 		"content-script-main": r("./src/content-script-main/index"),
+		styles: r("./src/styles.scss"),
 	},
 	output: {
 		path: r("./dist"),
@@ -27,7 +29,10 @@ module.exports = {
 	module: {
 		rules: [
 			{ test: /\.css$/, loader: "style-loader!css-loader" },
-			{ test: /\.scss$/, loader: "style-loader!css-loader!sass-loader" },
+			{
+				test: /\.scss$/,
+				use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+			},
 			{
 				test: /\.(jpe?g|png|gif|eot|ttf|svg|woff|woff2|md)$/i,
 				loader: "file-loader",
@@ -41,6 +46,7 @@ module.exports = {
 		],
 	},
 	plugins: [
+		new MiniCssExtractPlugin(),
 		new CleanWebpackPlugin(),
 		new webpack.EnvironmentPlugin({
 			NODE_ENV: null,

@@ -1,3 +1,4 @@
+import { editor } from "monaco-editor";
 import { Monaco } from "../monaco-loader";
 import { CompletionController } from "./CompletionController";
 
@@ -40,68 +41,47 @@ export class EditorWrapper {
 	private disposed = false;
 	private readonly disposables = new Array<() => any>();
 
+	private readonly monacoNode = document.createElement("div");
+	private readonly monacoContainer = document.createElement("div");
+	private readonly editorRoot: HTMLElement;
+	private readonly editor: editor.IStandaloneCodeEditor;
+
+	private fullscreen = false;
+	private editorHeight: number = 200;
+
 	private constructor(
 		private readonly textArea: HTMLTextAreaElement,
 		monaco: Monaco,
 		completionController: CompletionController,
 		theme: "light" | "dark"
 	) {
-		textArea.hedietEditorWrapper = this;
-		textArea.style.display = "none";
-		const editorRoot = textArea.parentNode!;
+		this.editorRoot = textArea.parentNode as HTMLElement;
 
-		const monacoNode = document.createElement("div");
-		monacoNode.className = "hediet-monaco-node";
-		monacoNode.style.display = "flex";
-		monacoNode.style.boxSizing = "border-box";
-		monacoNode.style.paddingBottom = "10px";
-		(monacoNode as MonacoNode).hedietEditorWrapper = this;
-		editorRoot.appendChild(monacoNode);
+		this.prepareTextArea();
 
-		// GH queries for all text areas that have non zero size, e.g. when
-		// the "Quote Reply" action. `display: none` on textArea breaks this logic.
-		// We must hack around this by overriding these properties.
-		// Since github also has hidden text areas,
-		// textArea must have a non-zero size if and only if
-		// monacoNode has a non-zero size.
-		Object.defineProperty(textArea, "offsetHeight", {
-			get: () => monacoNode.offsetHeight,
-		});
-		Object.defineProperty(textArea, "offsetWidth", {
-			get: () => monacoNode.offsetWidth,
-		});
-
+		this.monacoNode.className = "hediet-monaco-node";
+		(this.monacoNode as MonacoNode).hedietEditorWrapper = this;
+		this.editorRoot.appendChild(this.monacoNode);
 		this.disposables.push(() => {
-			monacoNode.remove();
+			this.monacoNode.remove();
 		});
 
-		const onEditorFocusChanged = (isFocused: boolean) => {
-			if (isFocused) {
-				monacoNode.style.border = "1px solid #4a9eff";
-				textArea.dispatchEvent(new Event("focus"));
-			} else {
-				monacoNode.style.border = "1px solid #c3c8cf";
-				textArea.dispatchEvent(new Event("blur"));
+		this.handleEditorFocusChanged(false);
+
+		this.monacoContainer.className = "hediet-monaco-container";
+		this.monacoNode.appendChild(this.monacoContainer);
+		this.monacoNode.addEventListener("click", (e) => {
+			if (e.target == this.monacoNode && this.fullscreen) {
+				this.setFullScreen(false);
 			}
-		};
-
-		onEditorFocusChanged(false);
-
-		const monacoContainer = document.createElement("div");
-		monacoContainer.className = "hediet-monaco-container";
-		monacoContainer.style.minWidth = "300px";
-		monacoContainer.style.minHeight = "0";
-		monacoContainer.style.flex = "1";
-		monacoContainer.style.height = `200px`;
-
-		monacoNode.appendChild(monacoContainer);
+		});
 
 		const model = monaco.editor.createModel(textArea.value, "markdown");
 
-		const { mentionUrl, issueUrl } = (editorRoot as any).dataset;
+		const { mentionUrl, issueUrl } = (this.editorRoot as any).dataset;
 		completionController.registerUrls(model, { mentionUrl, issueUrl });
 
-		const editor = monaco.editor.create(monacoContainer, {
+		this.editor = monaco.editor.create(this.monacoContainer, {
 			model,
 			automaticLayout: true,
 			minimap: { enabled: false },
@@ -110,15 +90,7 @@ export class EditorWrapper {
 			theme: theme === "dark" ? "vs-dark" : "vs",
 		});
 
-		// GH calls textArea.focus() in some places.
-		// We want to focus the monaco editor instead.
-		Object.defineProperty(textArea, "focus", {
-			value: () => {
-				editor.focus();
-			},
-		});
-
-		editor.addAction({
+		this.editor.addAction({
 			id: "github.submit",
 			label: "Submit",
 			run: () => {
@@ -132,13 +104,30 @@ export class EditorWrapper {
 			keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
 		});
 
-		this.disposables.push(() => editor.dispose());
+		this.editor.addAction({
+			id: "fullscreen.toggle",
+			label: "Toggle Fullscreen",
+			run: () => {
+				this.setFullScreen(!this.fullscreen);
+			},
+			keybindings: [monaco.KeyCode.F11],
+		});
+
+		this.disposables.push(() => this.editor.dispose());
 		this.disposables.push(() => model.dispose());
 
-		editor.onDidFocusEditorText(() => onEditorFocusChanged(true));
-		editor.onDidFocusEditorWidget(() => onEditorFocusChanged(true));
-		editor.onDidBlurEditorText(() => onEditorFocusChanged(false));
-		editor.onDidBlurEditorWidget(() => onEditorFocusChanged(false));
+		this.editor.onDidFocusEditorText(() =>
+			this.handleEditorFocusChanged(true)
+		);
+		this.editor.onDidFocusEditorWidget(() =>
+			this.handleEditorFocusChanged(true)
+		);
+		this.editor.onDidBlurEditorText(() =>
+			this.handleEditorFocusChanged(false)
+		);
+		this.editor.onDidBlurEditorWidget(() =>
+			this.handleEditorFocusChanged(false)
+		);
 
 		const interval = setInterval(() => {
 			if (model.getValue() !== textArea.value) {
@@ -161,7 +150,7 @@ export class EditorWrapper {
 			}
 		});
 
-		editor.onDidChangeCursorSelection((e) => {
+		this.editor.onDidChangeCursorSelection((e) => {
 			const startOffset = model.getOffsetAt(
 				e.selection.getStartPosition()
 			);
@@ -172,24 +161,78 @@ export class EditorWrapper {
 
 		model.onDidChangeContent((e) => {
 			if (e.changes.length === 1 && e.changes[0].text === " ") {
-				editor.trigger("editor", "hideSuggestWidget", undefined);
+				this.editor.trigger("editor", "hideSuggestWidget", undefined);
 			}
 			const value = model.getValue();
 			textArea.value = value;
 			textArea.dispatchEvent(new Event("input"));
 		});
 
-		editor.onDidContentSizeChange((e) => {
-			monacoContainer.style.height = `${Math.max(
-				100,
-				e.contentHeight + 2
-			)}px`;
+		this.editor.onDidContentSizeChange((e) => {
+			this.editorHeight = e.contentHeight;
+			this.applyState();
 		});
 
 		const resizeObserver = new ResizeObserver(() => {
-			editor.layout();
+			this.editor.layout();
 		});
-		resizeObserver.observe(editorRoot);
+		resizeObserver.observe(this.editorRoot);
+
+		this.applyState();
+	}
+
+	private handleEditorFocusChanged(isFocused: boolean): void {
+		if (isFocused) {
+			this.monacoNode.style.border = "1px solid #4a9eff";
+			this.textArea.dispatchEvent(new Event("focus"));
+		} else {
+			this.monacoNode.style.border = "1px solid #c3c8cf";
+			this.textArea.dispatchEvent(new Event("blur"));
+		}
+	}
+
+	private prepareTextArea() {
+		this.textArea.hedietEditorWrapper = this;
+		this.textArea.style.display = "none";
+
+		// GH queries for all text areas that have non zero size, e.g. when
+		// the "Quote Reply" action. `display: none` on textArea breaks this logic.
+		// We must hack around this by overriding these properties.
+		// Since github also has hidden text areas,
+		// textArea must have a non-zero size if and only if
+		// monacoNode has a non-zero size.
+		Object.defineProperty(this.textArea, "offsetHeight", {
+			get: () => this.editorRoot.offsetHeight,
+		});
+		Object.defineProperty(this.textArea, "offsetWidth", {
+			get: () => this.editorRoot.offsetWidth,
+		});
+
+		// GH calls textArea.focus() in some places.
+		// We want to focus the monaco editor instead.
+		Object.defineProperty(this.textArea, "focus", {
+			value: () => {
+				this.editor.focus();
+			},
+		});
+	}
+
+	private setFullScreen(fullscreen: boolean) {
+		this.fullscreen = fullscreen;
+		this.applyState();
+	}
+
+	private applyState() {
+		this.monacoNode.classList.toggle("fullscreen", this.fullscreen);
+
+		if (this.fullscreen) {
+			this.monacoContainer.style.height = "";
+		} else {
+			this.monacoContainer.style.height = `${Math.min(
+				300,
+				Math.max(100, this.editorHeight + 2)
+			)}px`;
+		}
 	}
 
 	dispose() {
@@ -201,9 +244,4 @@ export class EditorWrapper {
 			d();
 		}
 	}
-}
-
-declare class ResizeObserver {
-	constructor(handler: () => void);
-	observe(elem: any): void;
 }

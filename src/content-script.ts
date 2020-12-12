@@ -1,7 +1,7 @@
-function injectScript(file_path: string) {
-	var script = document.createElement("script");
+function injectScript(url: string) {
+	const script = document.createElement("script");
 	script.setAttribute("type", "text/javascript");
-	script.setAttribute("src", file_path);
+	script.setAttribute("src", url);
 	document.head.appendChild(script);
 }
 
@@ -10,3 +10,13 @@ document.head.dataset.hedietMonacoEditorPublicPath = chrome.extension.getURL(
 );
 
 injectScript(chrome.extension.getURL("/dist/content-script-main.js"));
+
+function injectCss(url: string) {
+	const link = document.createElement("link");
+	link.setAttribute("rel", "stylesheet");
+	link.setAttribute("type", "text/css");
+	link.setAttribute("href", url);
+	document.head.appendChild(link);
+}
+
+injectCss(chrome.extension.getURL("/dist/styles.css"));
