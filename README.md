@@ -1,4 +1,4 @@
-# Monaco Markdown Editor For Github (Chrome/Firefox)
+# Monaco Markdown Editor For GitHub (Chrome/Firefox)
 
 [![](https://img.shields.io/static/v1?style=social&label=Sponsor&message=%E2%9D%A4&logo=GitHub&color&link=%3Curl%3E)](https://github.com/sponsors/hediet)
 [![](https://img.shields.io/static/v1?style=social&label=Donate&message=%E2%9D%A4&logo=Paypal&color&link=%3Curl%3E)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZP5F38L4C88UY&source=url)
@@ -6,7 +6,7 @@
 
 **[ [Install For Chrome](https://chrome.google.com/webstore/detail/monaco-markdown-editor-fo/mmpbdjdnmhgkpligeniippcgfmkgkpnf) ]** **[ [Install For Firefox](https://addons.mozilla.org/de/firefox/addon/monaco-markdown-github-editor/) ]**
 
-This Chrome/Firefox extension brings the famous Monaco editor to Github!
+This Chrome/Firefox extension brings the famous Monaco editor to GitHub!
 
 ![](./docs/screenshot.png)
 
@@ -23,7 +23,7 @@ This Chrome/Firefox extension brings the famous Monaco editor to Github!
 
 -   Press F11 to toggle full screen.
 
-This extension replaces all github text areas for authoring markdown with a monaco editor.
+This extension replaces all GitHub text areas for authoring markdown with a monaco editor.
 
 ## Demo
 
