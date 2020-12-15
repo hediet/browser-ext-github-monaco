@@ -7,3 +7,14 @@ declare class ResizeObserver {
 	observe(elem: any): void;
 	disconnect(): void;
 }
+
+declare module "gemoji" {
+	const data: {
+		emoji: string;
+		names: string[];
+		tags: string[];
+		description: string;
+		category: string;
+	}[];
+	export = data;
+}

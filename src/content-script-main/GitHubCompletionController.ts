@@ -1,9 +1,9 @@
 import { Monaco } from "../monaco-loader";
 import { editor, Position, languages } from "monaco-editor";
 import { GithubApi } from "./GithubApi";
-import { LexerFactory } from "typed-lexer";
+import { TokenizerBuilder } from "./hediet-tokenizer";
 
-export class CompletionController {
+export class GitHubCompletionController {
 	private readonly urls = new Map<
 		editor.ITextModel,
 		{ mentionUrl: string; issueUrl: string }
@@ -36,33 +36,13 @@ export class CompletionController {
 			return { suggestions: [] };
 		}
 
-		const line = model.getLineContent(position.lineNumber);
-		const result = new TextLexerFactory().getLexerFor(line);
+		const token = textTokenizer.findFirstTokenAt(
+			model.getLineContent(position.lineNumber),
+			position.column - 1,
+			true
+		);
 
-		let currentToken:
-			| {
-					kind: "mention" | "reference";
-					startPos: number;
-					length: number;
-			  }
-			| undefined = undefined;
-		while (result.next()) {
-			const c = result.getCur();
-			if (
-				c.startPos <= position.column &&
-				position.column <= c.startPos + c.length + 1
-			) {
-				if (c.token !== "text") {
-					currentToken = {
-						kind: c.token,
-						length: c.length,
-						startPos: c.startPos,
-					};
-				}
-				break;
-			}
-		}
-		if (!currentToken) {
+		if (!token) {
 			return {
 				suggestions: [],
 			};
@@ -71,14 +51,14 @@ export class CompletionController {
 		const range = {
 			startLineNumber: position.lineNumber,
 			endLineNumber: position.lineNumber,
-			startColumn: currentToken.startPos + 1,
-			endColumn: currentToken.startPos + 1 + currentToken.length,
+			startColumn: token.offset + 1,
+			endColumn: token.offset + 1 + token.length,
 		};
-		if (currentToken.kind === "mention") {
+		if (token.kind === "mention") {
 			const data = await this.api.getMentionSuggestions(urls.mentionUrl);
 			return {
 				suggestions: data.map((s) => ({
-					label: s.name,
+					label: `@${s.login} (${s.name})`,
 					insertText: `@${s.login}`,
 					filterText: `@${s.name} ${s.login}`,
 					detail: `@${s.login}`,
@@ -91,7 +71,7 @@ export class CompletionController {
 			const data = await this.api.getIssueSuggestions(urls.issueUrl);
 			return {
 				suggestions: data.suggestions.map((s) => ({
-					label: s.title,
+					label: `#${s.number} (${s.title})`,
 					filterText: `#${s.title} ${s.number}`,
 					insertText: `#${s.number}`,
 					detail: `#${s.number}`,
@@ -104,14 +84,12 @@ export class CompletionController {
 	}
 }
 
-class TextLexerFactory extends LexerFactory<
-	"mention" | "reference" | "text",
-	undefined
-> {
-	constructor() {
-		super(undefined);
-		this.addSimpleRule(/#([a-zA-Z0-9]*)/, "reference");
-		this.addSimpleRule(/@([a-zA-Z0-9]*)/, "mention");
-		this.addSimpleRule(/./, "text");
-	}
-}
+const textTokenizer = (() => {
+	const b = new TokenizerBuilder<{ kind: "reference" | "mention" }>(
+		undefined
+	);
+
+	b.addRule(/(#[a-zA-Z0-9]*)/, [{ kind: "reference" }]);
+	b.addRule(/(@[a-zA-Z0-9]*)/, [{ kind: "mention" }]);
+	return b.build();
+})();

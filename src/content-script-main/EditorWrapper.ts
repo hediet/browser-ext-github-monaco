@@ -1,6 +1,6 @@
 import { editor } from "monaco-editor";
 import { Monaco } from "../monaco-loader";
-import { CompletionController } from "./CompletionController";
+import { GitHubCompletionController } from "./GitHubCompletionController";
 import { GithubApi } from "./GithubApi";
 
 export interface MonacoNode extends HTMLDivElement {
@@ -26,7 +26,7 @@ export class EditorWrapper {
 	public static wrap(
 		textArea: HTMLTextAreaElement,
 		monaco: Monaco,
-		completionController: CompletionController,
+		completionController: GitHubCompletionController,
 		api: GithubApi
 	) {
 		if (textArea.hedietEditorWrapper) {
@@ -56,7 +56,7 @@ export class EditorWrapper {
 	private constructor(
 		private readonly textArea: HTMLTextAreaElement,
 		monaco: Monaco,
-		completionController: CompletionController,
+		completionController: GitHubCompletionController,
 		theme: "light" | "dark",
 		private readonly githubApi: GithubApi
 	) {
@@ -201,7 +201,10 @@ export class EditorWrapper {
 			window.removeEventListener("resize", applyState);
 		});
 
-		this.fullscreen = this.editorRoot.offsetHeight > 0;
+		// Uncomment the following line if you want to automatically enter
+		// full-screen mode. This is usefull for debugging.
+		// this.fullscreen = this.editorRoot.offsetHeight > 0;
+
 		this.applyState();
 	}
 

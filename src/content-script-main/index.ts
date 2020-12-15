@@ -5,12 +5,17 @@ __webpack_public_path__ = document.head.dataset
 import { loadMonaco } from "../monaco-loader";
 import { GithubApi } from "./GithubApi";
 import { EditorWrapper, isMonacoNode } from "./EditorWrapper";
-import { CompletionController } from "./CompletionController";
+import { GitHubCompletionController } from "./GitHubCompletionController";
+import { EmojiCompletionController } from "./EmojiCompletionController";
 
 async function main() {
 	const githubApi = new GithubApi();
 	const monaco = await loadMonaco();
-	const completionController = new CompletionController(monaco, githubApi);
+	const completionController = new GitHubCompletionController(
+		monaco,
+		githubApi
+	);
+	const emojiCompletionController = new EmojiCompletionController(monaco);
 
 	function updateDocument() {
 		for (const textArea of [
