@@ -47,7 +47,6 @@ class EmojiCompletionItemProvider implements languages.CompletionItemProvider {
 				insertText: `${e.emoji}`,
 				range,
 				kind: languages.CompletionItemKind.Function,
-				commitCharacters: [":"],
 			})),
 		};
 	}
