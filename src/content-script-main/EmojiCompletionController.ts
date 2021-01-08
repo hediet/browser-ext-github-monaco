@@ -12,7 +12,7 @@ export class EmojiCompletionController {
 }
 
 class EmojiCompletionItemProvider implements languages.CompletionItemProvider {
-	public readonly triggerCharacters = [":"];
+	public readonly triggerCharacters = [];
 
 	async provideCompletionItems(
 		model: editor.ITextModel,
