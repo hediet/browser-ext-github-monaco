@@ -4,7 +4,11 @@ __webpack_public_path__ = document.head.dataset
 
 import { loadMonaco } from "../monaco-loader";
 import { GithubApi } from "./GithubApi";
-import { EditorWrapper, isMonacoNode } from "./EditorWrapper";
+import {
+	EditorWrapper,
+	editorWrapperDivClassName,
+	isMonacoNode,
+} from "./EditorWrapper";
 import { GitHubCompletionController } from "./GitHubCompletionController";
 import { EmojiCompletionController } from "./EmojiCompletionController";
 
@@ -31,8 +35,13 @@ async function main() {
 			);
 		}
 
+		// Github seems to copy dom nodes around.
+		// Github also copies the monaco editor which leads to problems.
+		// We fix this by just removing all "dead" dom nodes.
 		for (const div of [
-			...(document.getElementsByClassName("hediet-monaco-node") as any),
+			...(document.getElementsByClassName(
+				editorWrapperDivClassName
+			) as any),
 		]) {
 			if (!isMonacoNode(div)) {
 				div.remove();

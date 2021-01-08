@@ -8,10 +8,14 @@ export interface MonacoNode extends HTMLDivElement {
 }
 
 export function isMonacoNode(n: unknown): n is MonacoNode {
-	return typeof n === "object" && n !== null && "hedietEditorWrapper" in n;
+	const k: keyof MonacoNode = "hedietEditorWrapper";
+	return typeof n === "object" && n !== null && k in n;
 }
 
 type Theme = "light" | "dark";
+
+export const editorWrapperDivClassName = "hediet-editor-wrapper";
+export const monacoDivClassName = "hediet-monaco-container";
 
 function getGithubTheme(): Theme {
 	try {
@@ -64,7 +68,8 @@ export class EditorWrapper {
 
 		this.prepareTextArea();
 
-		this.editorWrapperDiv.className = "hediet-editor-wrapper";
+		this.editorWrapperDiv.className = editorWrapperDivClassName;
+
 		(this.editorWrapperDiv as MonacoNode).hedietEditorWrapper = this;
 		this.editorRoot.appendChild(this.editorWrapperDiv);
 		this.disposables.push(() => {
@@ -73,7 +78,7 @@ export class EditorWrapper {
 
 		this.handleEditorFocusChanged(false);
 
-		this.monacoDiv.className = "hediet-monaco-container";
+		this.monacoDiv.className = monacoDivClassName;
 		this.editorWrapperDiv.appendChild(this.monacoDiv);
 		this.editorWrapperDiv.addEventListener("click", (e) => {
 			if (e.target == this.editorWrapperDiv && this.fullscreen) {
