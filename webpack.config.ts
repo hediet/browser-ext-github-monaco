@@ -13,6 +13,7 @@ module.exports = {
 	entry: {
 		"content-script": r("./src/content-script"),
 		"content-script-main": r("./src/content-script-main/index"),
+		"options": r("./src/options"),
 		styles: r("./src/styles.scss"),
 	},
 	output: {

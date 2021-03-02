@@ -1,0 +1,410 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monaco Markdown Editor For GitHub</title>
+  </head>
+  <body>
+    <p><label><input type="checkbox" id="scrollBeyondLastLine" data-setting="true"> Scroll beyond last line</label></p>
+    <p>
+      <label>Word wrap <select id="wordWrap" data-setting="true">
+          <option value="off">Off</option>
+          <option value="on">On</option>
+          <option value="wordWrapColumn">Word wrap column</option>
+          <option value="bounded">Bounded</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Word wrap column <input type="number" id="wordWrapColumn" data-setting="true"></label>
+    </p>
+    <p>
+      <label>Theme <select id="theme" data-setting="true">
+          <option value="matchGithub">Match GitHub theme</option>
+          <option value="vs">Visual Studio</option>
+          <option value="vs-dark">Visual Studio (Dark)</option>
+          <option value="hc-black">HC (Black)</option>
+        </select></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="acceptSuggestionOnCommitCharacter" data-setting="true"> Accept suggestion on
+        commit character</label>
+    </p>
+    <p>
+      <label>Accept suggestion on Enter <select id="acceptSuggestionOnEnter" data-setting="true">
+          <option value="on">On</option>
+          <option value="off">Off</option>
+          <option value="smart">Smart</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Accessibility page size <input type="number" id="accessibilityPageSize" data-setting="true"></label>
+    </p>
+    <p>
+      <label>Accessibility support <select id="accessibilitySupport" data-setting="true">
+          <option value="on">On</option>
+          <option value="off">Off</option>
+          <option value="auto">Auto</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Auto closing brackets <select id="autoClosingBrackets" data-setting="true">
+          <option value="always">Always</option>
+          <option value="languageDefined">Language-defined</option>
+          <option value="beforeWhitespace">Before whitespace</option>
+          <option value="never">Never</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Auto closing overtype <select id="autoClosingOvertype" data-setting="true">
+          <option value="always">Always</option>
+          <option value="auto">Auto</option>
+          <option value="never">Never</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Auto closing quotes <select id="autoClosingQuotes" data-setting="true">
+          <option value="always">Always</option>
+          <option value="languageDefined">Language-defined</option>
+          <option value="beforeWhitespace">Before whitespace</option>
+          <option value="never">Never</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Auto indent <select id="autoIndent" data-setting="true">
+          <option value="advanced">Advanced</option>
+          <option value="none">None</option>
+          <option value="keep">Keep</option>
+          <option value="brackets">Brackets</option>
+          <option value="full">Full</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Auto surround <select id="autoSurround" data-setting="true">
+          <option value="languageDefined">Language-defined</option>
+          <option value="quotes">Quotes</option>
+          <option value="brackets">Brackets</option>
+          <option value="never">Never</option>
+        </select></label>
+    </p>
+    <p>
+    <fieldset>
+      <legend>Comments</legend>
+      <label><input type="checkbox" id="comments.insertSpace" data-setting="true"> Insert space</label></p>
+      <p>
+    </fieldset>
+    <label><input type="checkbox" id="contextmenu" data-setting="true"> Context menu</label></p>
+    <p>
+      <label><input type="checkbox" id="copyWithSyntaxHighlighting" data-setting="true"> Copy with syntax
+        highlighting</label>
+    </p>
+    <p>
+      <label>Cursor blinking <select id="cursorBlinking" data-setting="true">
+          <option value="blink">Blink</option>
+          <option value="smooth">Smooth</option>
+          <option value="phase">Phase</option>
+          <option value="expand">Expand</option>
+          <option value="solid">Solid</option>
+        </select></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="cursorSmoothCaretAnimation" data-setting="true"> Cursor smooth caret
+        animation</label>
+    </p>
+    <p>
+      <label>Cursor style <select id="cursorStyle" data-setting="true">
+          <option value="line">Line</option>
+          <option value="block">Block</option>
+          <option value="underline">Underline</option>
+          <option value="line-thin">Line - thin</option>
+          <option value="block-outline">Block - outline</option>
+          <option value="underline-thin">Underline - thin</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Cursor width <input type="number" id="cursorWidth" data-setting="true"></label>
+    </p>
+    <p>
+      <label>Cursor surrounding lines <input type="number" id="cursorSurroundingLines" data-setting="true"></label>
+    </p>
+    <p>
+      <label>Cursor surrounding lines style <select id="cursorSurroundingLinesStyle" data-setting="true">
+          <option value="default">Default</option>
+          <option value="all">All</option>
+        </select></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="detectIndentation" data-setting="true"> Detect indentation</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="dragAndDrop" data-setting="true"> Drag and drop</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="emptySelectionClipboard" data-setting="true"> Empty selection clipboard</label>
+    </p>
+    <p>
+      <label>Fast scroll sensitivity <input type="number" id="fastScrollSensitivity" data-setting="true"></label>
+    </p>
+    <fieldset>
+      <legend>Find</legend>
+      <p>
+        <label><input type="checkbox" id="find.addExtraSpaceOnTop" data-setting="true"> Add extra space on top</label>
+      </p>
+      <p>
+        <label>Auto find in selection <select id="find.autoFindInSelection" data-setting="true">
+            <option value="always">Always</option>
+            <option value="never">Never</option>
+            <option value="multiline">Multiline</option>
+          </select></label>
+      </p>
+      <p>
+        <label><input type="checkbox" id="find.seedSearchStringFromSelection" data-setting="true"> Seed search string
+          from selection</label>
+      </p>
+      <p>
+    </fieldset>
+    <p>
+      <label><input type="checkbox" id="folding" data-setting="true"> Folding</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="foldingHighlight" data-setting="true"> Folding highlight</label>
+    </p>
+    <p>
+      <label>Folding strategy <select id="foldingStrategy" data-setting="true">
+          <option value="auto">Auto</option>
+          <option value="indentation">Indentation</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Font family (leave empty to automatically select based on the OS) <input type="text" id="fontFamily"
+          data-setting="true"></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="fontLigatures" data-setting="true"> Font ligatures</label>
+    </p>
+    <p>
+      <label>Font size (leave 0 to automatically select based on the OS) <input type="number" id="fontSize"
+          data-setting="true"></label>
+    </p>
+    <p>
+      <label>Font weight <input type="text" id="fontWeight" data-setting="true"></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="glyphMargin" data-setting="true"> Glyph margin</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="hideCursorInOverviewRuler" data-setting="true"> Hide cursor in overview
+        ruler</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="highlightActiveIndentGuide" data-setting="true"> Highlight active indent
+        guide</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="insertSpaces" data-setting="true"> Insert spaces</label>
+    </p>
+    <p>
+      <label>Letter spacing <input type="number" id="letterSpacing" data-setting="true"></label>
+    </p>
+    <p>
+
+      <label>Line decorations width <input type="number" id="lineDecorationsWidth" data-setting="true"></label>
+      <select id="lineDecorationsWidthUnits">
+        <option value="px">px</option>
+        <option value="ch">ch</option>
+      </select>
+    </p>
+    <p>
+
+      <label>Line height <input type="number" id="lineHeight" data-setting="true"></label>
+    </p>
+    <p>
+      <label>Line numbers <select id="lineNumbers" data-setting="true">
+          <option value="on">On</option>
+          <option value="off">Off</option>
+          <option value="relative">Relative</option>
+          <option value="interval">Interval</option>
+        </select></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="links" data-setting="true"> Links</label>
+    </p>
+    <p>
+      <label>Match brackets <select id="matchBrackets" data-setting="true">
+          <option value="always">Always</option>
+          <option value="never">Never</option>
+          <option value="near">Near</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Mouse style <select id="mouseStyle" data-setting="true">
+          <option value="text">Text</option>
+          <option value="copy">Copy</option>
+          <option value="default">Default</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Mouse wheel scroll sensitivity <input type="number" id="mouseWheelScrollSensitivity"
+          data-setting="true"></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="mouseWheelZoom" data-setting="true"> Mouse wheel zoom</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="multiCursorMergeOverlapping" data-setting="true"> Multi cursor merge
+        overlapping</label>
+    </p>
+    <p>
+      <label>Multi cursor modifier <select id="multiCursorModifier" data-setting="true">
+          <option value="alt">Alt</option>
+          <option value="ctrlCmd">Ctrl/Cmd</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Multi cursor paste <select id="multiCursorPaste" data-setting="true">
+          <option value="full">Full</option>
+          <option value="spread">Spread</option>
+        </select></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="occurrencesHighlight" data-setting="true"> Occurrences highlight</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="overviewRulerBorder" data-setting="true"> Overview ruler border</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="quickSuggestions" data-setting="true"> Quick suggestions</label>
+    </p>
+    <p>
+      <label>Quick suggestions delay <input type="number" id="quickSuggestionsDelay" data-setting="true"></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="renderControlCharacters" data-setting="true"> Render control characters</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="renderFinalNewline" data-setting="true"> Render final newline</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="renderIndentGuides" data-setting="true"> Render indent guides</label>
+    </p>
+    <p>
+      <label>Render line highlight <select id="renderLineHighlight" data-setting="true">
+          <option value="line">Line</option>
+          <option value="none">None</option>
+          <option value="all">All</option>
+          <option value="gutter">Gutter</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Render whitespace <select id="renderWhitespace" data-setting="true">
+          <option value="none">None</option>
+          <option value="all">All</option>
+          <option value="boundary">Boundary</option>
+          <option value="selection">Selection</option>
+        </select></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="roundedSelection" data-setting="true"> Rounded selection</label>
+    </p>
+    <p>
+      <label>Scroll beyond last column <input type="number" id="scrollBeyondLastColumn" data-setting="true"></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="selectOnLineNumbers" data-setting="true"> Select on line numbers</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="selectionHighlight" data-setting="true"> Selection highlight</label>
+    </p>
+    <p>
+      <label>Show folding controls <select id="showFoldingControls" data-setting="true">
+          <option value="mouseover">Mouseover</option>
+          <option value="always">Always</option>
+        </select></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="smoothScrolling" data-setting="true"> Smooth scrolling</label>
+    </p>
+    <p>
+      <label>Suggest selection <select id="suggestSelection" data-setting="true">
+          <option value="recentlyUsed">Recently used</option>
+          <option value="first">First</option>
+          <option value="recentlyUsedByPrefix">Recently used by prefix</option>
+        </select></label>
+    </p>
+    <p>
+    <fieldset>
+      <legend>Suggest</legend>
+      <label><input type="checkbox" id="suggest.filterGraceful" data-setting="true"> Filter graceful</label></p>
+      <p>
+        <label>Insert mode <select id="suggest.insertMode" data-setting="true">
+            <option value="insert">Insert</option>
+            <option value="replace">Replace</option>
+          </select></label>
+      </p>
+      <p>
+        <label><input type="checkbox" id="suggest.localityBonus" data-setting="true"> Locality bonus</label>
+      </p>
+      <p>
+        <label>Max visible suggestions <input type="number" id="suggest.maxVisibleSuggestions"
+            data-setting="true"></label>
+      </p>
+      <p>
+        <label><input type="checkbox" id="suggest.shareSuggestSelections" data-setting="true"> Share suggest
+          selections</label>
+      </p>
+      <p>
+    </fieldset>
+    <label>Suggest font size (leave 0 to set to editor's font size) <input type="number" id="suggestFontSize"
+        data-setting="true"></label></p>
+    <p>
+      <label>Suggest line height (leave 0 to set to editor's line height) <input type="number" id="suggestLineHeight"
+          data-setting="true"></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="suggestOnTriggerCharacters" data-setting="true"> Suggest on trigger
+        characters</label>
+    </p>
+    <p>
+      <label>Tab completion <select id="tabCompletion" data-setting="true">
+          <option value="off">Off</option>
+          <option value="on">On</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Tab size <input type="number" id="tabSize" data-setting="true"></label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="trimAutoWhitespace" data-setting="true"> Trim auto whitespace</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="useTabStops" data-setting="true"> Use tab stops</label>
+    </p>
+    <p>
+      <label><input type="checkbox" id="wordBasedSuggestions" data-setting="true"> Word based suggestions</label>
+    </p>
+    <p>
+      <label>Word separators <input type="text" id="wordSeparators" data-setting="true"></label>
+    </p>
+    <p>
+      <label>Wrapping indent <select id="wrappingIndent" data-setting="true">
+          <option value="none">None</option>
+          <option value="same">Same</option>
+          <option value="indent">Indent</option>
+          <option value="deepIndent">Deep indent</option>
+        </select></label>
+    </p>
+    <p>
+      <label>Wrapping strategy <select id="wrappingStrategy" data-setting="true">
+          <option value="simple">Simple</option>
+          <option value="advanced">Advanced</option>
+        </select></label>
+    </p>
+
+    <p>
+      <button type="submit" id="save">Save</button>
+      <button type="reset" id="reset">Reset</button>
+    </p>
+
+    <script src="dist/options.js"></script>
+  </body>
+</html>

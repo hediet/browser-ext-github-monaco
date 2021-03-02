@@ -1,3 +1,5 @@
+import type { MonacoOptions } from '../settings';
+
 import { editor } from "monaco-editor";
 import { Monaco } from "../monaco-loader";
 import { GitHubCompletionController } from "./GitHubCompletionController";
@@ -31,7 +33,8 @@ export class EditorWrapper {
 		textArea: HTMLTextAreaElement,
 		monaco: Monaco,
 		completionController: GitHubCompletionController,
-		api: GithubApi
+		api: GithubApi,
+		settings: MonacoOptions,
 	) {
 		if (textArea.hedietEditorWrapper) {
 			return textArea.hedietEditorWrapper;
@@ -41,7 +44,8 @@ export class EditorWrapper {
 			monaco,
 			completionController,
 			getGithubTheme(),
-			api
+			api,
+			settings,
 		);
 	}
 
@@ -62,7 +66,8 @@ export class EditorWrapper {
 		monaco: Monaco,
 		completionController: GitHubCompletionController,
 		theme: "light" | "dark",
-		private readonly githubApi: GithubApi
+		private readonly githubApi: GithubApi,
+		settings: MonacoOptions,
 	) {
 		this.editorRoot = textArea.parentNode as HTMLElement;
 
@@ -94,12 +99,11 @@ export class EditorWrapper {
 		completionController.registerUrls(model, { mentionUrl, issueUrl });
 
 		this.editor = monaco.editor.create(this.monacoDiv, {
+			...settings,
 			model,
 			automaticLayout: true,
 			minimap: { enabled: false },
-			scrollBeyondLastLine: false,
-			wordWrap: "on",
-			theme: theme === "dark" ? "vs-dark" : "vs",
+			theme: settings.theme ?? (theme === "dark" ? "vs-dark" : "vs"),
 		});
 
 		this.editor.addAction({
