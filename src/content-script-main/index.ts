@@ -70,6 +70,4 @@ async function main(settings: MonacoOptions) {
 	updateDocument();
 }
 
-document.addEventListener("github-monaco-get-settings", function(e) {
-	main((<CustomEvent>e).detail);
-})
+main(JSON.parse(document.head.dataset.hedietMonacoEditorSettings!));
