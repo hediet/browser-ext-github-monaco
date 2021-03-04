@@ -215,21 +215,7 @@ function saveField(field: Setting, settings: MonacoOptions) {
   }
 
   const { parent, lastPath } = splitPath(settings, field.id);
-  if (field instanceof HTMLSelectElement) {
-    parent[lastPath] = field.value;
-  } else if (field instanceof HTMLInputElement) {
-    switch (field.type) {
-      case "text":
-        parent[lastPath] = field.value;
-        break;
-      case "number":
-        parent[lastPath] = Number(field.value);
-        break;
-      case "checkbox":
-        parent[lastPath] = field.checked;
-        break;
-    }
-  }
+  parent[lastPath] = field.value;
 }
 
 async function setFieldsToSettings() {
