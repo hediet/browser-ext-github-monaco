@@ -221,7 +221,7 @@ function saveField(field: Setting, settings: MonacoOptions) {
 async function setFieldsToSettings() {
   const settings = await getSettings();
   document.querySelectorAll(
-    "text-setting,number-setting,dropdown-setting,boolean-setting"
+    "text-setting,number-setting,dropdown-setting,boolean-setting,line-decorations-width"
   ).forEach(field => initField(<Setting>field, settings));
 }
 setFieldsToSettings();
@@ -235,7 +235,7 @@ document.getElementById("save")!.addEventListener("click", function(e) {
   e.preventDefault();
   const settings = JSON.parse(JSON.stringify(defaultSettings)); // Clone default settings in-depth
   document.querySelectorAll(
-    "text-setting,number-setting,dropdown-setting,boolean-setting"
+    "text-setting,number-setting,dropdown-setting,boolean-setting,line-decorations-width"
   ).forEach(field => saveField(<Setting>field, settings));
   chrome.storage.sync.set({ settings });
 }, false);
