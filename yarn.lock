@@ -3894,7 +3894,7 @@ webext-detect-page@^2.0.6:
   resolved "https://registry.yarnpkg.com/webext-detect-page/-/webext-detect-page-2.0.6.tgz#dbad250de3b8e82cf694e684741d00e5ac5587ef"
   integrity sha512-IGpAHdsHz9mwpT8nHyzbdVz1ArUnsRf3PNGMprk3MgEtyN+jhcV4JqkOjNiKIb3k9sZ4WKY4lCxi5MtV1MuTYg==
 
-webext-domain-permission-toggle@^2.1.0:
+webext-domain-permission-toggle@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/webext-domain-permission-toggle/-/webext-domain-permission-toggle-2.1.0.tgz#e178ff6e9e1fb87a74aa0b989deb1e7dd0eed357"
   integrity sha512-kRpTL0K783EYCh73sJnCzYyWeiwzFI0NVzJNgnYLdJ5pJv5TOZ240QVfzsumzuOz7gJENJ1S2gdPnMvUqPNC7g==
@@ -3904,7 +3904,7 @@ webext-domain-permission-toggle@^2.1.0:
     webext-patterns "^1.0.0"
     webext-polyfill-kinda "^0.0.2"
 
-webext-dynamic-content-scripts@^7.1.1:
+webext-dynamic-content-scripts@7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/webext-dynamic-content-scripts/-/webext-dynamic-content-scripts-7.1.1.tgz#3e6c04b48d5b27882e2d2e07932c83413b6dc28a"
   integrity sha512-TnFqRYgRFxlffmGOpcMgt3eWwkVgyTk+I0lrXY5xcl29idEeihsKeHypZWn6REwWEvhm4O8Mm8LzaCNxhQyBJg==
