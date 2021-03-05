@@ -11,6 +11,7 @@ const useCdnForMonaco = process.argv.indexOf("--use-cdn-for-monaco") !== -1;
 
 module.exports = {
 	entry: {
+		"background": r("./src/background"),
 		"content-script": r("./src/content-script"),
 		"content-script-main": r("./src/content-script-main/index"),
 		styles: r("./src/styles.scss"),

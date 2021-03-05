@@ -18,9 +18,18 @@
 			"run_at": "document_end"
 		}
 	],
+	"web_accessible_resources": ["dist/*"],
 	"permissions": [
+		"contextMenus",
+		"activeTab",
 		"https://github.com/*",
 		"https://gist.github.com/*"
 	],
-	"web_accessible_resources": ["dist/*"]
+	"browser_action": {
+		"default_icon": "logo.drawio.png"
+	},
+	"optional_permissions": ["*://*/*"],
+	"background": {
+		"scripts": ["/dist/background.js"]
+	}
 }

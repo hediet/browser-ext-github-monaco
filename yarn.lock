@@ -66,6 +66,14 @@
   resolved "https://registry.yarnpkg.com/@types/anymatch/-/anymatch-1.3.1.tgz#336badc1beecb9dacc38bea2cf32adf627a8421a"
   integrity sha512-/+CRPXpBDpo2RK9C68N3b2cOvO0Cf5B9aPijHsoDQTHivnGSObdOF2BRQOYjojWTDy6nQvMjmqRXIxH55VjxxA==
 
+"@types/chrome@0.0.128":
+  version "0.0.128"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.128.tgz#5dbd8b2539a367353fbe4386f119b510105f8b6a"
+  integrity sha512-eGc599TDtersMBW1cSnExHm0IHrXrO5xdk6Sa2Dq30ED+hR1rpT1ez0NNcCgvGO52nmktGfyvd3Uyquzv3LL4g==
+  dependencies:
+    "@types/filesystem" "*"
+    "@types/har-format" "*"
+
 "@types/chrome@^0.0.114":
   version "0.0.114"
   resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.114.tgz#8ceb33fa261f4b9e307fa7344ba8182d8d410d4e"
@@ -102,6 +110,11 @@
   version "0.0.28"
   resolved "https://registry.yarnpkg.com/@types/filewriter/-/filewriter-0.0.28.tgz#c054e8af4d9dd75db4e63abc76f885168714d4b3"
   integrity sha1-wFTor02d11205jq8dviFFocU1LM=
+
+"@types/firefox-webext-browser@^82.0.0":
+  version "82.0.0"
+  resolved "https://registry.yarnpkg.com/@types/firefox-webext-browser/-/firefox-webext-browser-82.0.0.tgz#4d0f5cfebd7321d2cbf0ccfb6032570f0138b958"
+  integrity sha512-zKHePkjMx42KIUUZCPcUiyu1tpfQXH9VR4iDYfns3HvmKVJzt/TAFT+DFVroos8BI9RH78YgF3Hi/wlC6R6cKA==
 
 "@types/glob@^7.1.1":
   version "7.1.1"
@@ -959,6 +972,15 @@ constants-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/constants-browserify/-/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
   integrity sha1-wguW2MYXdIqvHBYCF2DNJ/y4y3U=
+
+content-scripts-register-polyfill@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/content-scripts-register-polyfill/-/content-scripts-register-polyfill-2.1.0.tgz#82d92787ac1d0ea7bddddd5f10fa7e587d15c185"
+  integrity sha512-eEaBuN3eV9YwQ3pvrt61E+VimWOMvfwVri8Z0X+Dk9t5AkuLqTBQjAd649pfP4Rmy1xZy+SHtGAFXGxLeB2Ceg==
+  dependencies:
+    "@types/firefox-webext-browser" "^82.0.0"
+    webext-patterns "^1.0.0"
+    webext-polyfill-kinda "0.0.2"
 
 copy-concurrently@^1.0.0:
   version "1.0.5"
@@ -3859,6 +3881,46 @@ watchpack@^1.6.1:
   optionalDependencies:
     chokidar "^3.4.0"
     watchpack-chokidar2 "^2.0.0"
+
+webext-additional-permissions@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/webext-additional-permissions/-/webext-additional-permissions-2.0.1.tgz#713e5398e6421a8da33e3e282e2ebbfe0ab62ad2"
+  integrity sha512-K8OmXiE9QTPUVI6XKyMmV3FY8s+6DENxvRg40fzo64Mh2Kb3q+ZUPx73mnGeIiA5hfmstXdwGXULEdVD1IEYSw==
+  dependencies:
+    "@types/chrome" "0.0.128"
+
+webext-detect-page@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/webext-detect-page/-/webext-detect-page-2.0.6.tgz#dbad250de3b8e82cf694e684741d00e5ac5587ef"
+  integrity sha512-IGpAHdsHz9mwpT8nHyzbdVz1ArUnsRf3PNGMprk3MgEtyN+jhcV4JqkOjNiKIb3k9sZ4WKY4lCxi5MtV1MuTYg==
+
+webext-domain-permission-toggle@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/webext-domain-permission-toggle/-/webext-domain-permission-toggle-2.1.0.tgz#e178ff6e9e1fb87a74aa0b989deb1e7dd0eed357"
+  integrity sha512-kRpTL0K783EYCh73sJnCzYyWeiwzFI0NVzJNgnYLdJ5pJv5TOZ240QVfzsumzuOz7gJENJ1S2gdPnMvUqPNC7g==
+  dependencies:
+    webext-additional-permissions "^2.0.1"
+    webext-detect-page "^2.0.6"
+    webext-patterns "^1.0.0"
+    webext-polyfill-kinda "^0.0.2"
+
+webext-dynamic-content-scripts@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/webext-dynamic-content-scripts/-/webext-dynamic-content-scripts-7.1.1.tgz#3e6c04b48d5b27882e2d2e07932c83413b6dc28a"
+  integrity sha512-TnFqRYgRFxlffmGOpcMgt3eWwkVgyTk+I0lrXY5xcl29idEeihsKeHypZWn6REwWEvhm4O8Mm8LzaCNxhQyBJg==
+  dependencies:
+    content-scripts-register-polyfill "^2.1.0"
+    webext-additional-permissions "^2.0.1"
+
+webext-patterns@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/webext-patterns/-/webext-patterns-1.0.0.tgz#d674798b7267ceaec1f6c3e6287017c7ba1aa1e5"
+  integrity sha512-7LU6UtRt9Nql2+EHJX75ohfXR5ZR09Z9GrXWxi0TdAGt19WVOClUiwXlFa4tvhgfEPFDoSx8svd7aie3A+RC5w==
+
+webext-polyfill-kinda@0.0.2, webext-polyfill-kinda@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/webext-polyfill-kinda/-/webext-polyfill-kinda-0.0.2.tgz#49e5235c6a386f94ed3ae5a8ca5b42a8c088774e"
+  integrity sha512-Kecc1rDvsQtZJgnIAsMOQBj0WAL6v9Em42AW5EHcoute7z50lUQ2tXUfTyiydOauaT8VYK0tHYZlMWo7mlBM8g==
 
 webpack-cli@^3.3.11:
   version "3.3.11"
