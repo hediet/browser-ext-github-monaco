@@ -14,7 +14,11 @@ import {
 import { GitHubCompletionController } from "./GitHubCompletionController";
 import { EmojiCompletionController } from "./EmojiCompletionController";
 
-async function main(settings: MonacoOptions) {
+async function main() {
+	const settings = JSON.parse(
+		document.head.dataset.hedietMonacoEditorSettings!
+	) as MonacoOptions;
+
 	const githubApi = new GithubApi();
 	const monaco = await loadMonaco();
 	const completionController = new GitHubCompletionController(
@@ -34,7 +38,7 @@ async function main(settings: MonacoOptions) {
 				monaco,
 				completionController,
 				githubApi,
-				settings,
+				settings
 			);
 		}
 
@@ -70,4 +74,4 @@ async function main(settings: MonacoOptions) {
 	updateDocument();
 }
 
-main(JSON.parse(document.head.dataset.hedietMonacoEditorSettings!));
+main();

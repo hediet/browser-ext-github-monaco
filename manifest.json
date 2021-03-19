@@ -9,7 +9,7 @@
 	},
 
 	"options_ui": {
-		"page": "options.html",
+		"page": "./dist/options.html",
 		"open_in_tab": true,
 		"chrome_style": true,
 		"browser_style": true
@@ -17,10 +17,7 @@
 
 	"content_scripts": [
 		{
-			"matches": [
-				"https://github.com/*",
-				"https://gist.github.com/*"
-			],
+			"matches": ["https://github.com/*", "https://gist.github.com/*"],
 			"js": ["/dist/content-script.js"],
 			"run_at": "document_end"
 		}
