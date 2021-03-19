@@ -1,15 +1,11 @@
+import { getSettings } from "./settings";
+
 function injectScript(url: string) {
 	const script = document.createElement("script");
 	script.setAttribute("type", "text/javascript");
 	script.setAttribute("src", url);
 	document.head.appendChild(script);
 }
-
-document.head.dataset.hedietMonacoEditorPublicPath = chrome.extension.getURL(
-	"/dist/"
-);
-
-injectScript(chrome.extension.getURL("/dist/content-script-main.js"));
 
 function injectCss(url: string) {
 	const link = document.createElement("link");
@@ -19,4 +15,13 @@ function injectCss(url: string) {
 	document.head.appendChild(link);
 }
 
-injectCss(chrome.extension.getURL("/dist/styles.css"));
+(async () => {
+	document.head.dataset.hedietMonacoEditorPublicPath = chrome.extension.getURL(
+		"/dist/"
+	);
+	const settings = await getSettings();
+	document.head.dataset.hedietMonacoEditorSettings = JSON.stringify(settings);
+
+	injectScript(chrome.extension.getURL("/dist/content-script-main.js"));
+	injectCss(chrome.extension.getURL("/dist/styles.css"));
+})();

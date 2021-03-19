@@ -2,6 +2,8 @@ declare let __webpack_public_path__: string;
 __webpack_public_path__ = document.head.dataset
 	.hedietMonacoEditorPublicPath as string;
 
+import type { MonacoOptions } from "../settings";
+
 import { loadMonaco } from "../monaco-loader";
 import { GithubApi } from "./GithubApi";
 import {
@@ -13,6 +15,10 @@ import { GitHubCompletionController } from "./GitHubCompletionController";
 import { EmojiCompletionController } from "./EmojiCompletionController";
 
 async function main() {
+	const settings = JSON.parse(
+		document.head.dataset.hedietMonacoEditorSettings!
+	) as MonacoOptions;
+
 	const githubApi = new GithubApi();
 	const monaco = await loadMonaco();
 	const completionController = new GitHubCompletionController(
@@ -31,7 +37,8 @@ async function main() {
 				textArea,
 				monaco,
 				completionController,
-				githubApi
+				githubApi,
+				settings
 			);
 		}
 
