@@ -1,0 +1,52 @@
+name: Release
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  submodules: true
+            - name: Install Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 10.x
+            - run: yarn install --frozen-lockfile
+            - run: yarn build
+            - name: Get Version
+              id: getVersion
+              run: echo "::set-output name=version::v$(cat manifest.json | jq '.version' -r)"
+            - name: Check If Release Tag Exists
+              id: checkTag
+              uses: hediet/tag-action@main
+              with:
+                  tag: ${{ steps.getVersion.outputs.version }}
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+            - name: Publish To Chrome Marketplace
+              if: steps.checkTag.outputs.exists == 'false'
+              uses: trmcnvn/chrome-addon@master
+              with:
+                  extension: mmpbdjdnmhgkpligeniippcgfmkgkpnf
+                  zip: dist/extension.zip
+                  client-id: ${{ secrets.CHROME_MARKETPLACE_CLIENT_ID }}
+                  client-secret: ${{ secrets.CHROME_MARKETPLACE_CLIENT_SECRET }}
+                  refresh-token: ${{ secrets.CHROME_MARKETPLACE_REFRESH_TOKEN }}
+            - name: Publish To Firefox Marketplace
+              uses: trmcnvn/firefox-addon@v1
+              with:
+                  uuid: "{e3f69ec4-632e-431a-a534-0f457f1e193b}"
+                  xpi: dist/extension.zip
+                  manifest: manifest.json
+                  api-key: ${{ secrets.FIREFOX_API_KEY }}
+                  api-secret: ${{ secrets.FIREFOX_API_SECRET }}
+            - name: Create Release Tag
+              uses: hediet/tag-action@main
+              with:
+                  tag: ${{ steps.getVersion.outputs.version }}
+                  create: "true"
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
