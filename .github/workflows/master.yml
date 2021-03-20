@@ -9,11 +9,11 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@f1d3225b5376a0791fdee5a0e8eac5289355e43a # pin@v2
               with:
                   submodules: true
             - name: Install Node.js
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@7984c00a6eb7ec35a15dd83fd6d4f88c67421da3 # pin@v1
               with:
                   node-version: 10.x
             - run: yarn install --frozen-lockfile
@@ -23,13 +23,13 @@ jobs:
               run: echo "::set-output name=version::v$(cat manifest.json | jq '.version' -r)"
             - name: Check If Release Tag Exists
               id: checkTag
-              uses: hediet/tag-action@main
+              uses: hediet/tag-action@7549c6c145708c4a1a6cbfcc2520255695c9cbe8 # pin@main
               with:
                   tag: ${{ steps.getVersion.outputs.version }}
                   github_token: ${{ secrets.GITHUB_TOKEN }}
             - name: Publish To Chrome Marketplace
               if: steps.checkTag.outputs.exists == 'false'
-              uses: trmcnvn/chrome-addon@master
+              uses: trmcnvn/chrome-addon@3431bca72e30167ac2c2266100b8198615ef37e3 # pin@master
               with:
                   extension: mmpbdjdnmhgkpligeniippcgfmkgkpnf
                   zip: dist/extension.zip
@@ -37,7 +37,7 @@ jobs:
                   client-secret: ${{ secrets.CHROME_MARKETPLACE_CLIENT_SECRET }}
                   refresh-token: ${{ secrets.CHROME_MARKETPLACE_REFRESH_TOKEN }}
             - name: Publish To Firefox Marketplace
-              uses: trmcnvn/firefox-addon@v1
+              uses: trmcnvn/firefox-addon@0d05671269b82c69c3f22ed86d8e772e89d47cf4 # pin@v1
               with:
                   uuid: "{e3f69ec4-632e-431a-a534-0f457f1e193b}"
                   xpi: dist/extension.zip
@@ -45,7 +45,7 @@ jobs:
                   api-key: ${{ secrets.FIREFOX_API_KEY }}
                   api-secret: ${{ secrets.FIREFOX_API_SECRET }}
             - name: Create Release Tag
-              uses: hediet/tag-action@main
+              uses: hediet/tag-action@7549c6c145708c4a1a6cbfcc2520255695c9cbe8 # pin@main
               with:
                   tag: ${{ steps.getVersion.outputs.version }}
                   create: "true"
