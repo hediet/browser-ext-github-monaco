@@ -59,7 +59,7 @@ export class GitHubCompletionController {
 			return {
 				suggestions: data.map((s) => ({
 					label: `@${s.login} (${s.name})`,
-					insertText: `@${s.login}`,
+					insertText: `@${s.login} `,
 					filterText: `@${s.name} ${s.login}`,
 					detail: `@${s.login}`,
 					kind: this.monaco.languages.CompletionItemKind.Function,
@@ -73,7 +73,7 @@ export class GitHubCompletionController {
 				suggestions: data.suggestions.map((s) => ({
 					label: `#${s.number} (${s.title})`,
 					filterText: `#${s.title} ${s.number}`,
-					insertText: `#${s.number}`,
+					insertText: `#${s.number} `,
 					detail: `#${s.number}`,
 					kind: this.monaco.languages.CompletionItemKind.Function,
 					documentation: s.type,
