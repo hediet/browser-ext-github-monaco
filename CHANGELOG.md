@@ -13,10 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Fixes buggy layout when commenting on a source code line (regression).
 
-## [0.4.2]
-
--   Fixes buggy layout when commenting on a source code line (regression).
-
 ## [0.4.1]
 
 -   Removes ":" as trigger character for auto completion.
