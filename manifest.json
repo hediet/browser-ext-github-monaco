@@ -1,24 +1,26 @@
 {
 	"manifest_version": 2,
 	"name": "Monaco Markdown Editor For GitHub",
-	"version": "0.5.0",
-
+	"version": "0.5.2",
 	"description": "This extension brings the famous Monaco editor to GitHub!",
 	"icons": {
 		"128": "logo.drawio.png"
 	},
-
 	"options_ui": {
 		"page": "./dist/options.html",
 		"open_in_tab": true,
 		"chrome_style": true,
 		"browser_style": true
 	},
-
 	"content_scripts": [
 		{
-			"matches": ["https://github.com/*", "https://gist.github.com/*"],
-			"js": ["/dist/content-script.js"],
+			"matches": [
+				"https://github.com/*",
+				"https://gist.github.com/*"
+			],
+			"js": [
+				"/dist/content-script.js"
+			],
 			"run_at": "document_end"
 		}
 	],
@@ -27,5 +29,7 @@
 		"https://github.com/*",
 		"https://gist.github.com/*"
 	],
-	"web_accessible_resources": ["dist/*"]
+	"web_accessible_resources": [
+		"dist/*"
+	]
 }
