@@ -36,15 +36,15 @@ jobs:
                   client-id: ${{ secrets.CHROME_MARKETPLACE_CLIENT_ID }}
                   client-secret: ${{ secrets.CHROME_MARKETPLACE_CLIENT_SECRET }}
                   refresh-token: ${{ secrets.CHROME_MARKETPLACE_REFRESH_TOKEN }}
-            - name: Publish To Firefox Marketplace
-              if: steps.checkTag.outputs.exists == 'false'
-              uses: trmcnvn/firefox-addon@0d05671269b82c69c3f22ed86d8e772e89d47cf4 # pin@v1
-              with:
-                  uuid: "{e3f69ec4-632e-431a-a534-0f457f1e193b}"
-                  xpi: dist/extension.zip
-                  manifest: manifest.json
-                  api-key: ${{ secrets.FIREFOX_API_KEY }}
-                  api-secret: ${{ secrets.FIREFOX_API_SECRET }}
+            # - name: Publish To Firefox Marketplace
+            #   if: steps.checkTag.outputs.exists == 'false'
+            #   uses: trmcnvn/firefox-addon@0d05671269b82c69c3f22ed86d8e772e89d47cf4 # pin@v1
+            #   with:
+            #       uuid: "{e3f69ec4-632e-431a-a534-0f457f1e193b}"
+            #       xpi: dist/extension.zip
+            #       manifest: manifest.json
+            #       api-key: ${{ secrets.FIREFOX_API_KEY }}
+            #       api-secret: ${{ secrets.FIREFOX_API_SECRET }}
             - name: Create Release Tag
               uses: hediet/tag-action@7549c6c145708c4a1a6cbfcc2520255695c9cbe8 # pin@main
               with:
