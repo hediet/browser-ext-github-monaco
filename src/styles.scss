@@ -31,6 +31,12 @@ textarea:has(+ .hediet-editor-wrapper) {
 		border: 0;
 		padding: 20px 100px;
 
+		&.show-preview {
+			.hediet-monaco-container {
+				max-width: 1000px;
+			}
+		}
+
 		.hediet-monaco-container {
 			max-width: 1000px;
 			border: 2px solid black;

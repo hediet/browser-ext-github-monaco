@@ -21,7 +21,7 @@ This Chrome/Firefox extension brings the famous Monaco editor to GitHub!
 
 ## Additional Features
 
--   Press F11 to toggle full screen.
+-   Press F11 to toggle full screen (F10 for wide full screen).
 -   The full screen mode previews the markdown if enough space is available.
 
 ## Github Features

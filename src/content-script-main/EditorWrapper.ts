@@ -1,4 +1,4 @@
-import type { MonacoOptions } from '../settings';
+import type { MonacoOptions } from "../settings";
 
 import { editor } from "monaco-editor";
 import { Monaco } from "../monaco-loader";
@@ -34,8 +34,8 @@ export class EditorWrapper {
 		monaco: Monaco,
 		completionController: GitHubCompletionController,
 		api: GithubApi,
-		settings: MonacoOptions,
-	) {
+		settings: MonacoOptions
+	): EditorWrapper {
 		if (textArea.hedietEditorWrapper) {
 			return textArea.hedietEditorWrapper;
 		}
@@ -45,7 +45,7 @@ export class EditorWrapper {
 			completionController,
 			getGithubTheme(),
 			api,
-			settings,
+			settings
 		);
 	}
 
@@ -59,6 +59,7 @@ export class EditorWrapper {
 	private readonly editor: editor.IStandaloneCodeEditor;
 
 	private fullscreen = false;
+	private showPreview = true;
 	private editorHeight: number = 200;
 
 	private constructor(
@@ -67,7 +68,7 @@ export class EditorWrapper {
 		completionController: GitHubCompletionController,
 		theme: "light" | "dark",
 		private readonly githubApi: GithubApi,
-		settings: MonacoOptions,
+		settings: MonacoOptions
 	) {
 		this.editorRoot = textArea.parentNode as HTMLElement;
 
@@ -87,7 +88,7 @@ export class EditorWrapper {
 		this.editorWrapperDiv.appendChild(this.monacoDiv);
 		this.editorWrapperDiv.addEventListener("click", (e) => {
 			if (e.target == this.editorWrapperDiv && this.fullscreen) {
-				this.setFullScreen(false);
+				this.setFullScreen(false, false);
 			}
 		});
 
@@ -124,9 +125,18 @@ export class EditorWrapper {
 			id: "fullscreen.toggle",
 			label: "Toggle Fullscreen",
 			run: () => {
-				this.setFullScreen(!this.fullscreen);
+				this.setFullScreen(!this.fullscreen, true);
 			},
 			keybindings: [monaco.KeyCode.F11],
+		});
+
+		this.editor.addAction({
+			id: "fullscreen.toggle-without-preview",
+			label: "Toggle Fullscreen (Without Preview)",
+			run: () => {
+				this.setFullScreen(!this.fullscreen, false);
+			},
+			keybindings: [monaco.KeyCode.F10],
 		});
 
 		this.disposables.push(() => this.editor.dispose());
@@ -282,18 +292,27 @@ export class EditorWrapper {
 		});
 	}
 
-	private setFullScreen(fullscreen: boolean) {
+	private setFullScreen(fullscreen: boolean, showPreview: boolean) {
 		this.fullscreen = fullscreen;
+		this.showPreview = showPreview;
 		this.applyState();
 	}
 
 	private get previewVisible(): boolean {
-		return this.fullscreen && this.editorWrapperDiv.offsetWidth > 1300;
+		return (
+			this.showPreview &&
+			this.fullscreen &&
+			this.editorWrapperDiv.offsetWidth > 1300
+		);
 	}
 
 	private applyState() {
 		this.updatePreview();
 		this.editorWrapperDiv.classList.toggle("fullscreen", this.fullscreen);
+		this.editorWrapperDiv.classList.toggle(
+			"show-preview",
+			this.showPreview
+		);
 
 		this.monacoDiv.style.height = this.fullscreen
 			? ""
