@@ -9,11 +9,11 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@f1d3225b5376a0791fdee5a0e8eac5289355e43a # pin@v2
+              uses: actions/checkout@e2f20e631ae6d7dd3b768f56a5d2af784dd54791 # pin@v2
               with:
                   submodules: true
             - name: Install Node.js
-              uses: actions/setup-node@7984c00a6eb7ec35a15dd83fd6d4f88c67421da3 # pin@v1
+              uses: actions/setup-node@f1f314fca9dfce2769ece7d933488f076716723e # pin@v1
               with:
                   node-version: 10.x
             - run: yarn install --frozen-lockfile
@@ -29,10 +29,10 @@ jobs:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
             - name: Publish To Chrome Marketplace
               if: steps.checkTag.outputs.exists == 'false'
-              uses: trmcnvn/chrome-addon@3431bca72e30167ac2c2266100b8198615ef37e3 # pin@master
+              uses: mnao305/chrome-extension-upload@eb962593ec36f9e70426b6ed9b33f40ae270d523 # pin@3.0.0
               with:
-                  extension: mmpbdjdnmhgkpligeniippcgfmkgkpnf
-                  zip: dist/extension.zip
+                  file-path: dist/extension.zip
+                  extension-id: mmpbdjdnmhgkpligeniippcgfmkgkpnf
                   client-id: ${{ secrets.CHROME_MARKETPLACE_CLIENT_ID }}
                   client-secret: ${{ secrets.CHROME_MARKETPLACE_CLIENT_SECRET }}
                   refresh-token: ${{ secrets.CHROME_MARKETPLACE_REFRESH_TOKEN }}

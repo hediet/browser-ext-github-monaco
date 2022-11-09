@@ -10,7 +10,7 @@
 		"build": "yarn build-js && yarn bundle",
 		"build-js": "webpack --mode production",
 		"bundle": "yarn shx rm -rf ./dist/extension.zip && yarn jszip-cli add -o ./dist/extension.zip -i *.map dist manifest.json logo.drawio.png",
-		"update-actions": "yarn pin-github-action ./.github/workflows/master.yml; yarn prettier ./.github/workflows/master.yml -w"
+		"update-actions": "yarn pin-github-action ./.github/workflows/master.yml && yarn prettier ./.github/workflows/master.yml -w"
 	},
 	"devDependencies": {
 		"@ffflorian/jszip-cli": "^3.1.0",
