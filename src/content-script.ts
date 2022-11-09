@@ -16,12 +16,12 @@ function injectCss(url: string) {
 }
 
 (async () => {
-	document.head.dataset.hedietMonacoEditorPublicPath = chrome.extension.getURL(
-		"/dist/"
-	);
+	document.head.dataset.hedietMonacoEditorPublicPath =
+		chrome.runtime.getURL("/dist/");
+
 	const settings = await getSettings();
 	document.head.dataset.hedietMonacoEditorSettings = JSON.stringify(settings);
 
-	injectScript(chrome.extension.getURL("/dist/content-script-main.js"));
-	injectCss(chrome.extension.getURL("/dist/styles.css"));
+	injectScript(chrome.runtime.getURL("/dist/content-script-main.js"));
+	injectCss(chrome.runtime.getURL("/dist/styles.css"));
 })();
