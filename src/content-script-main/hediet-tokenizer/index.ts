@@ -21,52 +21,52 @@ export abstract class RulesBuilder<TTokenInfo extends {}, TState> {
 			this.rules.push(args[0]);
 		} else {
 			const tokenInfo = args[1];
-			const x: RegExpRule<
-				TTokenInfo,
-				TState
-			>["getTokens"] = Array.isArray(tokenInfo)
-				? (match, state) => {
-						if (match.length - 1 !== tokenInfo.length) {
-							throw new Error(
-								"Number of groups does not match number of provided tokens!"
-							);
-						}
-						const result = new Array<Token<TTokenInfo, TState>>();
-						let offset = 0;
-						for (let i = 0; i < match.length - 1; i++) {
-							const groupMatch = match[i + 1];
-							if (groupMatch === undefined) {
-								continue;
+			const x: RegExpRule<TTokenInfo, TState>["getTokens"] =
+				Array.isArray(tokenInfo)
+					? (match, state) => {
+							if (match.length - 1 !== tokenInfo.length) {
+								throw new Error(
+									"Number of groups does not match number of provided tokens!"
+								);
 							}
-							const info = tokenInfo[i];
-							if (info) {
-								result.push({
-									offset: match.index + offset,
-									length: groupMatch.length,
-									text: groupMatch,
-									state,
-									...info,
-								});
+							const result = new Array<
+								Token<TTokenInfo, TState>
+							>();
+							let offset = 0;
+							for (let i = 0; i < match.length - 1; i++) {
+								const groupMatch = match[i + 1];
+								if (groupMatch === undefined) {
+									continue;
+								}
+								const info = tokenInfo[i];
+								if (info) {
+									result.push({
+										offset: match.index + offset,
+										length: groupMatch.length,
+										text: groupMatch,
+										state,
+										...info,
+									});
+								}
+								offset += groupMatch.length;
 							}
-							offset += groupMatch.length;
-						}
 
-						if (offset !== match[0].length) {
-							throw new Error(
-								"Groups must partionize the matched string!"
-							);
-						}
-						return result;
-				  }
-				: (match, state) => [
-						{
-							offset: match.index,
-							length: match[0].length,
-							text: match[0],
-							state,
-							...tokenInfo,
-						},
-				  ];
+							if (offset !== match[0].length) {
+								throw new Error(
+									"Groups must partionize the matched string!"
+								);
+							}
+							return result;
+					  }
+					: (match, state) => [
+							{
+								offset: match.index,
+								length: match[0].length,
+								text: match[0],
+								state,
+								...tokenInfo,
+							},
+					  ];
 
 			this.rules.push(new RegExpRule(args[0], x));
 		}
@@ -121,7 +121,7 @@ export type Token<TTokenInfo extends {}, TState> = TTokenInfo & {
 	text: string;
 };
 
-type MatchResult<TTokenInfo, TState> =
+type MatchResult<TTokenInfo extends {}, TState> =
 	| {
 			matches: true;
 			nextState: TState;
@@ -136,7 +136,7 @@ type MatchResult<TTokenInfo, TState> =
 			offsetOfNextPossibleMatch: number;
 	  };
 
-abstract class Rule<TTokenInfo, TState> {
+abstract class Rule<TTokenInfo extends {}, TState> {
 	abstract match(
 		state: TState,
 		text: string,

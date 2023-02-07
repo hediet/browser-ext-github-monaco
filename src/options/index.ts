@@ -143,11 +143,30 @@ class LineDecorationsWidth extends Setting {
 	}
 }
 
+class TextAreaSetting extends LabelBeforeSetting {
+	private input!: HTMLTextAreaElement;
+
+	get value() {
+		console.log("get value", this.input.value);
+		return this.input.value;
+	}
+	set value(v) {
+		this.input.value = String(v);
+		console.log("set value", v);
+	}
+
+	protected getElement(): HTMLElement {
+		this.input = document.createElement("textarea");
+		return this.input;
+	}
+}
+
 customElements.define("text-setting", TextSetting);
 customElements.define("number-setting", NumberSetting);
 customElements.define("dropdown-setting", DropdownSetting);
 customElements.define("boolean-setting", BooleanSetting);
 customElements.define("line-decorations-width", LineDecorationsWidth);
+customElements.define("text-area-setting", TextAreaSetting);
 
 interface ObjectPath {
 	parent: any;
@@ -228,7 +247,7 @@ async function setFieldsToSettings() {
 	const settings = await getSettings();
 	document
 		.querySelectorAll(
-			"text-setting,number-setting,dropdown-setting,boolean-setting,line-decorations-width"
+			"text-setting,number-setting,dropdown-setting,boolean-setting,line-decorations-width,text-area-setting"
 		)
 		.forEach((field) => initField(<Setting>field, settings));
 }
@@ -253,7 +272,7 @@ document.getElementById("save")!.addEventListener(
 		const settings = JSON.parse(JSON.stringify(defaultSettings)); // Clone default settings in-depth
 		document
 			.querySelectorAll(
-				"text-setting,number-setting,dropdown-setting,boolean-setting,line-decorations-width"
+				"text-setting,number-setting,dropdown-setting,boolean-setting,line-decorations-width,text-area-setting"
 			)
 			.forEach((field) => saveField(<Setting>field, settings));
 		chrome.storage.sync.set({ settings });

@@ -2,7 +2,9 @@ import type * as monaco from "monaco-editor";
 
 export type MonacoOptions = monaco.editor.IStandaloneEditorConstructionOptions;
 
-export const defaultSettings: MonacoOptions = {
+export const defaultSettings: MonacoOptions & {
+	customInlineCompletions: string;
+} = {
 	scrollBeyondLastLine: false,
 	wordWrap: "on",
 	// When wordWrap is "wordWrapColumn" or "bounded", the following also applies:
@@ -36,7 +38,7 @@ export const defaultSettings: MonacoOptions = {
 	find: {
 		addExtraSpaceOnTop: true,
 		autoFindInSelection: "never",
-		seedSearchStringFromSelection: true,
+		seedSearchStringFromSelection: "always",
 	},
 	folding: true,
 	foldingHighlight: true,
@@ -47,7 +49,6 @@ export const defaultSettings: MonacoOptions = {
 	fontWeight: "normal",
 	glyphMargin: false,
 	hideCursorInOverviewRuler: false,
-	highlightActiveIndentGuide: true,
 	insertSpaces: true,
 	letterSpacing: 0,
 	lineDecorationsWidth: 10,
@@ -67,7 +68,6 @@ export const defaultSettings: MonacoOptions = {
 	quickSuggestionsDelay: 10,
 	renderControlCharacters: false,
 	renderFinalNewline: true,
-	renderIndentGuides: true,
 	renderLineHighlight: "line", // The docs says the default is "all", but this is wrong
 	renderWhitespace: "none",
 	roundedSelection: true,
@@ -95,6 +95,7 @@ export const defaultSettings: MonacoOptions = {
 	wordSeparators: "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
 	wrappingIndent: "none",
 	wrappingStrategy: "simple",
+	customInlineCompletions: "",
 };
 
 export function getSettings() {

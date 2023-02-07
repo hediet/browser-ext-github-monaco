@@ -13,11 +13,12 @@ import {
 } from "./EditorWrapper";
 import { GitHubCompletionController } from "./GitHubCompletionController";
 import { EmojiCompletionController } from "./EmojiCompletionController";
+import { SentenceInlineCompletionProvider } from "./InlineCompletionProvider";
 
 async function main() {
 	const settings = JSON.parse(
 		document.head.dataset.hedietMonacoEditorSettings!
-	) as MonacoOptions;
+	) as MonacoOptions & { customInlineCompletions: string };
 
 	const githubApi = new GithubApi();
 	const monaco = await loadMonaco();
@@ -26,6 +27,11 @@ async function main() {
 		githubApi
 	);
 	const emojiCompletionController = new EmojiCompletionController(monaco);
+	const sentenceInlineCompletionProvider =
+		new SentenceInlineCompletionProvider(
+			monaco,
+			settings.customInlineCompletions
+		);
 
 	function updateDocument() {
 		for (const textArea of [
