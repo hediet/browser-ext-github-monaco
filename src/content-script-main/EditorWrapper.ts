@@ -28,6 +28,38 @@ function getGithubTheme(): Theme {
 	}
 }
 
+const oldAddEventListener = HTMLTextAreaElement.prototype.addEventListener;
+HTMLTextAreaElement.prototype.addEventListener = function (
+	type: string,
+	listener: any,
+	...args: any[]
+) {
+	if (type === "paste") {
+		return (oldAddEventListener as any).apply(this, [
+			type,
+			function (e: ClipboardEvent, ...args: any[]) {
+				if (
+					e.clipboardData &&
+					e.clipboardData.files.length > 0 &&
+					(e.currentTarget as any)?.className ===
+						"inputarea monaco-mouse-cursor-text"
+				) {
+					// Disable monaco paste handler for files, as GitHub handles this already
+					return;
+				}
+				listener(e, ...args);
+			},
+			...args,
+		]);
+	}
+
+	return (oldAddEventListener as Function).apply(this, [
+		type,
+		listener,
+		...args,
+	]);
+};
+
 export class EditorWrapper {
 	public static wrap(
 		textArea: HTMLTextAreaElement,
