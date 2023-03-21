@@ -1,3 +1,4 @@
+import { sanitize } from 'dompurify';
 import type { MonacoOptions } from '../settings';
 
 import { editor } from "monaco-editor";
@@ -241,7 +242,7 @@ export class EditorWrapper {
 		clearTimeout(this.lastUpdatePreviewTimeout);
 		this.lastUpdatePreviewTimeout = setTimeout(async () => {
 			const preview = await this.githubApi.getPreview(node!, newText);
-			this.previewDiv.innerHTML = preview;
+			this.previewDiv.innerHTML = sanitize(preview);
 			this.lastText = newText;
 		}, 1000);
 	}
