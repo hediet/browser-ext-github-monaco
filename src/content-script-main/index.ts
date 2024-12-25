@@ -34,11 +34,13 @@ async function main() {
 		);
 
 	function updateDocument() {
-		for (const textArea of [
-			...(document.getElementsByClassName(
-				"comment-form-textarea"
-			) as any),
-		]) {
+		const issueCommentBox = document.getElementById("issue_body");
+		const wikiBox = document.getElementById("gollum-editor-body");
+		for (const textArea of [issueCommentBox, wikiBox] as any[]) {
+			if (!textArea) {
+				continue;
+			}
+
 			EditorWrapper.wrap(
 				textArea,
 				monaco,

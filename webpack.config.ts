@@ -9,7 +9,6 @@ import CopyWebpackPlugin = require("copy-webpack-plugin");
 const r = (file: string) => path.resolve(__dirname, file);
 
 module.exports = (env: any) => {
-	const useCdnForMonaco = !!env["use-cdn-for-monaco"];
 	return {
 		entry: {
 			"content-script": r("./src/content-script"),
@@ -60,9 +59,6 @@ module.exports = (env: any) => {
 		plugins: [
 			new MiniCssExtractPlugin(),
 			new CleanWebpackPlugin(),
-			new webpack.EnvironmentPlugin({
-				USE_CDN_FOR_MONACO: useCdnForMonaco ? "1" : "0",
-			}),
 			new ForkTsCheckerWebpackPlugin(),
 			new CopyWebpackPlugin({
 				patterns: [
@@ -73,13 +69,9 @@ module.exports = (env: any) => {
 				],
 			}),
 			new CleanWebpackPlugin(),
-			...(useCdnForMonaco
-				? []
-				: [
-						new MonacoWebpackPlugin({
-							languages: ["markdown"],
-						}),
-				  ]),
+			new MonacoWebpackPlugin({
+				languages: ["markdown"],
+			}),
 		],
 	} as webpack.Configuration;
 };
