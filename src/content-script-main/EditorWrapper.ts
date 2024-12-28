@@ -42,7 +42,7 @@ HTMLTextAreaElement.prototype.addEventListener = function (
 					e.clipboardData &&
 					e.clipboardData.files.length > 0 &&
 					(e.currentTarget as any)?.className ===
-						"inputarea monaco-mouse-cursor-text"
+					"inputarea monaco-mouse-cursor-text"
 				) {
 					// Disable monaco paste handler for files, as GitHub handles this already
 					return;
@@ -92,7 +92,7 @@ export class EditorWrapper {
 
 	private fullscreen = false;
 	private showPreview = true;
-	private editorHeight: number = 200;
+	private editorHeight: number = this.textArea.offsetHeight ?? 200;
 
 	private constructor(
 		private readonly textArea: HTMLTextAreaElement,
